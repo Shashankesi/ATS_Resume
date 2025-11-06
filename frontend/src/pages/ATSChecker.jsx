@@ -270,12 +270,12 @@ const ATSChecker = () => {
                   </div>
 
                   <motion.button
-                    className="mt-8 px-8 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-orange-500/50 transition flex items-center gap-2"
-                    whileHover={{ scale: 1.05 }}
+                    className="mt-8 px-8 py-4 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-xl hover:from-orange-500 hover:to-orange-700 shadow-lg hover:shadow-orange-500/50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 flex items-center gap-3 active:scale-95"
+                    whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <Download size={20} />
-                    Download Report
+                    Download Full Report
                   </motion.button>
                 </div>
               </div>

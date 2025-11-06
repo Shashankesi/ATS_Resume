@@ -307,8 +307,9 @@ const Jobs = () => {
 
                                             {/* Apply Button */}
                                             <motion.button
-                                                whileHover={{ x: 5 }}
-                                                className="mt-4 w-full py-2 px-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-orange-500/50 transition-all flex items-center justify-center gap-2"
+                                                whileHover={{ scale: 1.03, y: -2 }}
+                                                whileTap={{ scale: 0.97 }}
+                                                className="mt-4 w-full py-3 px-4 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-lg hover:from-orange-500 hover:to-orange-700 shadow-lg hover:shadow-orange-500/50 transition-all duration-300 transform flex items-center justify-center gap-2 active:scale-95"
                                             >
                                                 Apply Now <ExternalLink className="w-4 h-4" />
                                             </motion.button>

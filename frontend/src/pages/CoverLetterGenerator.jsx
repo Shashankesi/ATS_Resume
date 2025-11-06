@@ -308,19 +308,19 @@ ${formData.jobTitle}`;
                                 {/* Action Buttons */}
                                 <div className="flex flex-wrap gap-3">
                                     <motion.button
-                                        whileHover={{ scale: 1.05 }}
+                                        whileHover={{ scale: 1.05, y: -2 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={copyToClipboard}
-                                        className="flex-1 min-w-40 px-6 py-3 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+                                        className="flex-1 min-w-40 px-6 py-3 bg-white/10 border-2 border-white/30 hover:border-orange-500/50 text-white font-bold rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-orange-500/20"
                                     >
                                         <Copy className="w-4 h-4" />
                                         {copied ? 'Copied!' : 'Copy to Clipboard'}
                                     </motion.button>
                                     <motion.button
-                                        whileHover={{ scale: 1.05 }}
+                                        whileHover={{ scale: 1.05, y: -2 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={downloadLetter}
-                                        className="flex-1 min-w-40 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-indigo-500/50 transition-all flex items-center justify-center gap-2"
+                                        className="flex-1 min-w-40 px-6 py-3 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-lg hover:from-orange-500 hover:to-orange-700 shadow-lg hover:shadow-orange-500/50 transition-all duration-300 flex items-center justify-center gap-2"
                                     >
                                         <Download className="w-4 h-4" />
                                         Download
@@ -331,13 +331,13 @@ ${formData.jobTitle}`;
                             {/* Edit/Regenerate */}
                             <div className="flex gap-3">
                                 <motion.button
-                                    whileHover={{ scale: 1.05 }}
+                                    whileHover={{ scale: 1.05, y: -2 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => {
                                         setStep(1);
                                         setGeneratedLetter('');
                                     }}
-                                    className="flex-1 px-6 py-3 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+                                    className="flex-1 px-6 py-3 bg-white/10 border-2 border-white/30 hover:border-orange-500/50 text-white font-bold rounded-lg hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-orange-500/20"
                                 >
                                     <RefreshCw className="w-4 h-4" />
                                     Create Another

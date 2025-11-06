@@ -100,21 +100,21 @@ const ResumeEditor = () => {
                     
                 </div>
                 <div className="flex space-x-3">
-                    <button onClick={handleSave} disabled={saved || isSaving || !resumeId} className="flex items-center px-4 py-2 bg-accent text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 transition shadow-md">
+                    <button onClick={handleSave} disabled={saved || isSaving || !resumeId} className="flex items-center px-6 py-2.5 bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-lg hover:from-orange-500 hover:to-orange-700 disabled:opacity-50 transition-all duration-300 shadow-lg hover:shadow-orange-500/50 font-semibold">
                         {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                        {isSaving ? 'Saving...' : 'Save Now'}
+                        {isSaving ? 'Saving...' : 'Save Resume'}
                     </button>
                     <Suspense fallback={<button className="p-2 bg-gray-200 rounded-lg">PDF</button>}>
                         <PdfExporter />
                     </Suspense>
                     <button 
                         onClick={() => updateResume('TOGGLE_ATS', !isATSMode)} 
-                        className={`p-2 rounded-lg transition shadow-md ${isATSMode ? 'bg-primary-dark text-white' : 'bg-gray-200 dark:bg-slate-700 dark:text-white'}`}
+                        className={`p-2 rounded-lg transition shadow-md font-semibold border-2 ${isATSMode ? 'bg-orange-500/20 border-orange-500/50 text-orange-300' : 'bg-gray-200/10 dark:bg-slate-700/30 dark:text-white border-slate-600/50'}`}
                         title="Toggle ATS Friendly Mode"
                     >
                         <Zap className="w-5 h-5" />
                     </button>
-                    <button className="p-2 bg-gray-200 dark:bg-slate-700 dark:text-white rounded-lg transition shadow-md">
+                    <button className="p-2 bg-slate-700/30 dark:bg-slate-700/50 dark:text-white rounded-lg transition shadow-md border border-slate-600/50 hover:border-orange-500/50">
                         <Settings className="w-5 h-5" />
                     </button>
                 </div>
