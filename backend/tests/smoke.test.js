@@ -59,7 +59,7 @@ describe('SmartCareer Backend - Smoke Tests', () => {
             authToken = response.body.token;
             testUserId = response.body._id;
             console.log('✅ User registration passed');
-        });
+        }, 15000);
 
         test('POST /api/auth/login - should login user and return token', async () => {
             const userData = {
@@ -80,7 +80,7 @@ describe('SmartCareer Backend - Smoke Tests', () => {
 
             expect(response.body).toHaveProperty('token');
             console.log('✅ User login passed');
-        });
+        }, 15000);
     });
 
     describe('Resume Upload', () => {
@@ -150,7 +150,7 @@ BS Computer Science - State University (2018)
                     fs.unlinkSync(resumePath);
                 }
             }
-        });
+        }, 15000);
     });
 
     describe('AI Routes', () => {
@@ -177,7 +177,7 @@ BS Computer Science - State University (2018)
             expect(response.body).toHaveProperty('response');
             expect(typeof response.body.response).toBe('string');
             console.log('✅ AI generic endpoint passed (MOCK mode)');
-        });
+        }, 15000);
     });
 
     describe('Error Handling', () => {

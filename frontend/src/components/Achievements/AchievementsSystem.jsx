@@ -2,138 +2,105 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AchievementBadge from './AchievementBadge';
 import { Trophy, Zap } from 'lucide-react';
+import { getUserAchievements, checkAndUnlockAchievements } from '../../utils/achievementUtils';
 
 /**
  * Achievements System Component
  * Displays all achievements and tracks unlocked ones
  */
 const AchievementsSystem = ({ userResumes = [], atsScores = [] }) => {
-  const [achievements, setAchievements] = useState([
+  const [unlockedAchievements, setUnlockedAchievements] = useState([]);
+  const [stats, setStats] = useState({ unlockedCount: 0, totalAchievements: 8 });
+  const [loading, setLoading] = useState(true);
+
+  // All possible achievements
+  const allAchievements = [
     {
       id: 'first-resume',
       title: 'First Step',
       description: 'Upload your first resume',
-      condition: () => userResumes.length > 0,
-      unlocked: false,
+      category: 'resume',
     },
     {
       id: 'perfect-score',
       title: 'Perfect Score',
       description: 'Achieve 100 ATS score',
-      condition: () => atsScores.some(score => score >= 100),
-      unlocked: false,
+      category: 'ats',
     },
     {
       id: 'top-performer',
       title: 'Top Performer',
       description: 'Maintain 85+ ATS average',
-      condition: () => {
-        if (atsScores.length === 0) return false;
-        const avg = atsScores.reduce((a, b) => a + b, 0) / atsScores.length;
-        return avg >= 85;
-      },
-      unlocked: false,
-    },
-    {
-      id: 'streak-master',
-      title: 'Streak Master',
-      description: 'Login 5 days in a row',
-      condition: () => checkLoginStreak(5),
-      unlocked: false,
+      category: 'ats',
     },
     {
       id: 'ai-explorer',
       title: 'AI Explorer',
       description: 'Use 5 different AI features',
-      condition: () => countAIFeatureUses() >= 5,
-      unlocked: false,
+      category: 'ai-usage',
     },
     {
       id: 'skill-master',
       title: 'Skill Master',
       description: 'Identify 20+ skills',
-      condition: () => countTotalSkills() >= 20,
-      unlocked: false,
+      category: 'skill-building',
     },
     {
       id: 'goal-setter',
       title: 'Goal Setter',
       description: 'Create 3 resumes',
-      condition: () => userResumes.length >= 3,
-      unlocked: false,
+      category: 'resume',
     },
     {
-      id: 'achievement-unlocked',
+      id: 'achievement-hunter',
       title: 'Achievement Hunter',
       description: 'Unlock 5 achievements',
-      condition: (unlockedCount) => unlockedCount >= 5,
-      unlocked: false,
+      category: 'engagement',
     },
-  ]);
-
-  // Helper functions
-  const checkLoginStreak = (days) => {
-    const loginHistory = JSON.parse(localStorage.getItem('login-history') || '[]');
-    if (loginHistory.length < days) return false;
-
-    const today = new Date().toDateString();
-    const recentLogins = loginHistory.slice(-days);
-
-    return recentLogins.every((date, idx) => {
-      const expected = new Date(today);
-      expected.setDate(expected.getDate() - (days - 1 - idx));
-      return new Date(date).toDateString() === expected.toDateString();
-    });
-  };
-
-  const countAIFeatureUses = () => {
-    const aiHistory = JSON.parse(localStorage.getItem('ai-history') || '[]');
-    const uniqueFeatures = new Set(aiHistory.map(h => h.feature));
-    return uniqueFeatures.size;
-  };
-
-  const countTotalSkills = () => {
-    return userResumes.reduce((total, resume) => {
-      const skills = resume.data?.sections?.find(s => s.type === 'skills')?.content?.list || '';
-      return total + skills.split(',').filter(s => s.trim()).length;
-    }, 0);
-  };
+  ];
 
   useEffect(() => {
-    // Check all achievements
-    const updatedAchievements = achievements.map((achievement) => {
-      const unlockedCount = achievements.filter(a => a.unlocked).length;
-      return {
-        ...achievement,
-        unlocked: achievement.condition(unlockedCount),
-      };
-    });
-
-    setAchievements(updatedAchievements);
-
-    // Record unlocked achievements
-    updatedAchievements.forEach((achievement) => {
-      if (achievement.unlocked && !achievements.find(a => a.id === achievement.id)?.unlocked) {
-        recordAchievementUnlock(achievement);
+    const fetchAchievements = async () => {
+      try {
+        setLoading(true);
+        // First check for new achievements
+        await checkAndUnlockAchievements();
+        // Then fetch all unlocked achievements
+        const achievements = await getUserAchievements();
+        setUnlockedAchievements(achievements);
+        setStats({
+          unlockedCount: achievements.length,
+          totalAchievements: allAchievements.length,
+        });
+      } catch (error) {
+        console.error('Failed to load achievements:', error);
+        setStats({
+          unlockedCount: 0,
+          totalAchievements: allAchievements.length,
+        });
+      } finally {
+        setLoading(false);
       }
-    });
+    };
+
+    fetchAchievements();
   }, [userResumes, atsScores]);
 
-  const recordAchievementUnlock = (achievement) => {
-    const unlockedAchievements = JSON.parse(
-      localStorage.getItem('unlocked-achievements') || '{}'
-    );
-    if (!unlockedAchievements[achievement.id]) {
-      unlockedAchievements[achievement.id] = {
-        ...achievement,
-        unlockedAt: new Date().toISOString(),
-      };
-      localStorage.setItem('unlocked-achievements', JSON.stringify(unlockedAchievements));
-    }
+  const progressPercentage = Math.round((stats.unlockedCount / stats.totalAchievements) * 100);
+
+  const isAchievementUnlocked = (achievementId) => {
+    return unlockedAchievements.some(a => a.achievementId === achievementId);
   };
 
-  const unlockedCount = achievements.filter(a => a.unlocked).length;
-  const progressPercentage = Math.round((unlockedCount / achievements.length) * 100);
+  if (loading) {
+    return (
+      <motion.section className="my-16 flex items-center justify-center h-40">
+        <div className="animate-spin">
+          <Trophy className="w-8 h-8 text-yellow-400" />
+        </div>
+      </motion.section>
+    );
+  }
 
   return (
     <motion.section
@@ -149,7 +116,7 @@ const AchievementsSystem = ({ userResumes = [], atsScores = [] }) => {
             <h2 className="text-4xl font-black gradient-text">Achievements</h2>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-slate-100">{unlockedCount}/{achievements.length}</p>
+            <p className="text-2xl font-bold text-slate-100">{stats.unlockedCount}/{stats.totalAchievements}</p>
             <p className="text-sm text-slate-400">Unlocked</p>
           </div>
         </div>
@@ -167,7 +134,7 @@ const AchievementsSystem = ({ userResumes = [], atsScores = [] }) => {
 
       {/* Achievements grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-        {achievements.map((achievement, idx) => (
+        {allAchievements.map((achievement, idx) => (
           <motion.div
             key={achievement.id}
             initial={{ opacity: 0, y: 20 }}
@@ -178,7 +145,7 @@ const AchievementsSystem = ({ userResumes = [], atsScores = [] }) => {
           >
             <AchievementBadge
               achievement={achievement}
-              isUnlocked={achievement.unlocked}
+              isUnlocked={isAchievementUnlocked(achievement.id)}
             />
           </motion.div>
         ))}
@@ -196,7 +163,7 @@ const AchievementsSystem = ({ userResumes = [], atsScores = [] }) => {
           <div>
             <h3 className="text-lg font-semibold text-slate-100 mb-2">Keep Going! 🚀</h3>
             <p className="text-slate-300">
-              You've unlocked {unlockedCount} achievement{unlockedCount !== 1 ? 's' : ''}! Continue using SmartCareer to unlock more achievements and advance your career.
+              You've unlocked {stats.unlockedCount} achievement{stats.unlockedCount !== 1 ? 's' : ''}! Continue using SmartCareer to unlock more achievements and advance your career.
             </p>
           </div>
         </div>
