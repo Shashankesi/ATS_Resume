@@ -1,0 +1,53 @@
+import { Routes, Route } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import NavbarEnhanced from './components/NavbarEnhanced';
+import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import ResumeEditor from './pages/ResumeEditor';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import PrivateRoute from './components/PrivateRoute';
+import NotFound from './pages/NotFound';
+import BuilderPreview from './pages/BuilderPreview';
+import AdminDashboard from './pages/AdminDashboard';
+
+function App() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0f172a] via-[#0a0e27] to-[#0f172a]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-slate-300 text-lg">Loading SmartCareer...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <ErrorBoundary>
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <NavbarEnhanced />
+        <main className="flex-grow pt-16">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
+            <Route path="/resume/edit/:id" element={<PrivateRoute element={ResumeEditor} />} />
+            <Route path="/resume/new" element={<PrivateRoute element={ResumeEditor} />} />
+            <Route path="/resume/public/:slug" element={<BuilderPreview isPublic={true} />} />
+            <Route path="/admin" element={<PrivateRoute element={AdminDashboard} />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </ErrorBoundary>
+  );
+}
+
+export default App;

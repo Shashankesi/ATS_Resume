@@ -1,0 +1,39 @@
+{
+  "name": "smartcareer-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Vite + React frontend for SmartCareer",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@react-three/drei": "^9.97.0",
+    "@react-three/fiber": "^9.4.0",
+    "@tailwindcss/forms": "^0.5.7",
+    "axios": "^1.4.0",
+    "firebase": "^10.7.0",
+    "framer-motion": "^10.12.16",
+    "html2pdf.js": "^0.12.1",
+    "lucide-react": "^0.294.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.0",
+    "react-toastify": "^11.0.5",
+    "recharts": "^2.7.2",
+    "tailwindcss": "^3.3.0",
+    "three": "^0.181.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.0",
+    "vite": "^5.1.0"
+  }
+}
