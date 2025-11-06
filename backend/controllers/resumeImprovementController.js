@@ -9,7 +9,7 @@ const User = require('../models/User');
 /**
  * Get resume with formatting suggestions
  */
-exports.getResumeSuggestions = async (req, res) => {
+const getResumeSuggestions = async (req, res) => {
     try {
         const { resumeId } = req.params;
         const userId = req.user._id;
@@ -66,7 +66,7 @@ exports.getResumeSuggestions = async (req, res) => {
 /**
  * Batch apply improvements to resume
  */
-exports.applyBatchImprovements = async (req, res) => {
+const applyBatchImprovements = async (req, res) => {
     try {
         const { resumeId, improvements } = req.body;
         const userId = req.user._id;
@@ -119,7 +119,7 @@ exports.applyBatchImprovements = async (req, res) => {
 /**
  * Export resume to PDF (simplified text version)
  */
-exports.exportResumePDF = async (req, res) => {
+const exportResumePDF = async (req, res) => {
     try {
         const { resumeId } = req.params;
         const userId = req.user._id;
@@ -178,7 +178,7 @@ ${resume.certifications?.join('\n') || 'No certifications added'}
 /**
  * Clone and create resume version
  */
-exports.cloneResume = async (req, res) => {
+const cloneResume = async (req, res) => {
     try {
         const { resumeId } = req.params;
         const userId = req.user._id;
@@ -212,7 +212,7 @@ exports.cloneResume = async (req, res) => {
 /**
  * Get resume improvements history
  */
-exports.getImprovementsHistory = async (req, res) => {
+const getImprovementsHistory = async (req, res) => {
     try {
         const { resumeId } = req.params;
         const userId = req.user._id;
@@ -251,7 +251,7 @@ exports.getImprovementsHistory = async (req, res) => {
 /**
  * Compare resume versions
  */
-exports.compareVersions = async (req, res) => {
+const compareVersions = async (req, res) => {
     try {
         const { resumeId1, resumeId2 } = req.body;
         const userId = req.user._id;

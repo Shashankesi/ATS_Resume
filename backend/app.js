@@ -16,6 +16,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const achievementRoutes = require('./routes/achievementRoutes');
 const resumeImprovementRoutes = require('./routes/resumeImprovementRoutes');
+const advancedResumeRoutes = require('./routes/advancedResumeRoutes');
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/ai', advancedResumeRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/resume-improvements', resumeImprovementRoutes);
 
