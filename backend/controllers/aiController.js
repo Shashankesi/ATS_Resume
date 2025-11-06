@@ -15,6 +15,14 @@ if (AI_MODE === 'GEMINI' && GEMINI_API_KEY) {
 }
 
 // Mock responses for testing (simplified)
+const mockJobs = [
+    { id: 1, title: 'Senior Software Engineer', company: 'Google', location: 'Mountain View, CA', salary: '$200k-$250k', match: 95 },
+    { id: 2, title: 'Full Stack Developer', company: 'Meta', location: 'Menlo Park, CA', salary: '$180k-$220k', match: 88 },
+    { id: 3, title: 'Backend Engineer', company: 'Amazon', location: 'Seattle, WA', salary: '$170k-$210k', match: 82 },
+    { id: 4, title: 'DevOps Engineer', company: 'Stripe', location: 'San Francisco, CA', salary: '$190k-$230k', match: 78 },
+    { id: 5, title: 'Machine Learning Engineer', company: 'OpenAI', location: 'San Francisco, CA', salary: '$250k-$300k', match: 75 },
+];
+
 const mockResponses = {
     'generateSummary': (payload) => {
         const { role = 'Professional', skills = [] } = payload;
