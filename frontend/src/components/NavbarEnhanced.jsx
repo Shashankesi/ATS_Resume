@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { Menu, X, User, LogOut, LayoutDashboard, FileText, Settings, Sun, Moon, Sparkles, ChevronDown, Zap, TrendingUp, MessageCircle, Briefcase } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, FileText, Settings, Sun, Moon, Sparkles, ChevronDown, Zap, TrendingUp, MessageCircle, Briefcase, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NavbarEnhanced = () => {
@@ -58,11 +58,11 @@ const NavbarEnhanced = () => {
     };
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl"
+        <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-3xl"
             style={{
-                background: 'linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.8))',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.97) 0%, rgba(15, 23, 42, 0.85) 100%)',
+                borderBottom: '1px solid rgba(249, 115, 22, 0.2)',
+                boxShadow: '0 12px 48px rgba(249, 115, 22, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
             }}
         >
             
@@ -104,22 +104,25 @@ const NavbarEnhanced = () => {
                                 >
                                     <Link
                                         to={item.href}
-                                        className={`relative px-4 py-2 rounded-lg transition-all duration-300 font-semibold ${
+                                        className={`relative px-5 py-2.5 rounded-lg transition-all duration-300 font-semibold flex items-center space-x-2 overflow-hidden group ${
                                             isActive(item.href)
-                                                ? 'text-orange-300 bg-orange-500/20 border border-orange-500/50'
-                                                : 'text-slate-300 hover:text-white hover:bg-white/10 border border-transparent hover:border-white/20'
-                                        } group flex items-center space-x-2 shadow-sm hover:shadow-lg hover:shadow-orange-500/10 transition-all`}
+                                                ? 'text-orange-200 bg-gradient-to-r from-orange-500/30 to-orange-500/10 border border-orange-400/50 shadow-lg shadow-orange-500/20'
+                                                : 'text-slate-200 hover:text-white border border-transparent'
+                                        }`}
                                     >
-                                        {item.icon && <item.icon className="h-4 w-4" />}
+                                        {/* Hover gradient background */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/0 to-orange-500/0 group-hover:from-orange-500/20 group-hover:via-transparent group-hover:to-orange-500/0 transition-all duration-300 -z-10"></div>
+                                        
+                                        {item.icon && <item.icon className="h-4 w-4 transition-transform group-hover:scale-110" />}
                                         <span>{item.name}</span>
                                         {item.name === 'Features' && isAuthenticated && (
-                                            <ChevronDown className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+                                            <ChevronDown className="h-4 w-4 transition-transform duration-300 group-hover:rotate-180" />
                                         )}
                                         {isActive(item.href) && (
                                             <motion.div
                                                 layoutId="navbar-indicator"
-                                                className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-1 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full"
-                                                style={{ width: '80%' }}
+                                                className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-transparent via-orange-400 to-transparent rounded-full blur-sm"
+                                                style={{ width: '90%' }}
                                                 transition={{ type: 'spring', stiffness: 300 }}
                                             />
                                         )}
@@ -130,36 +133,52 @@ const NavbarEnhanced = () => {
                                         <AnimatePresence>
                                             {showFeaturesDropdown && (
                                                 <motion.div
-                                                    initial={{ opacity: 0, y: -15 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -15 }}
-                                                    className="absolute top-full left-0 mt-3 w-64 bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-xl border border-orange-500/30 rounded-2xl shadow-2xl overflow-hidden z-50"
+                                                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                                                    transition={{ type: 'spring', stiffness: 300 }}
+                                                    className="absolute top-full left-0 mt-4 w-72 bg-gradient-to-br from-slate-800/98 via-slate-800/95 to-slate-900/98 backdrop-blur-2xl border border-orange-500/40 rounded-2xl shadow-2xl overflow-hidden z-50"
                                                     style={{
-                                                        boxShadow: '0 20px 60px rgba(249, 115, 22, 0.2)'
+                                                        boxShadow: '0 24px 72px rgba(249, 115, 22, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
                                                     }}
                                                 >
-                                                    <div className="p-3">
+                                                    {/* Gradient header */}
+                                                    <div className="px-4 pt-4 pb-2">
+                                                        <div className="text-xs font-bold text-orange-400 uppercase tracking-wider">AI Features</div>
+                                                    </div>
+                                                    
+                                                    <div className="px-2 pb-2 space-y-1">
                                                         {aiFeatures.map((feature, idx) => (
                                                             <motion.div
                                                                 key={feature.href}
-                                                                initial={{ opacity: 0, x: -10 }}
+                                                                initial={{ opacity: 0, x: -15 }}
                                                                 animate={{ opacity: 1, x: 0 }}
-                                                                transition={{ delay: idx * 0.05 }}
+                                                                transition={{ delay: idx * 0.06 }}
                                                             >
                                                                 <Link
                                                                     to={feature.href}
                                                                     onClick={() => setShowFeaturesDropdown(false)}
-                                                                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 border border-transparent hover:border-orange-500/30 transition-all group"
+                                                                    className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-orange-500/20 hover:to-orange-500/5 border border-transparent hover:border-orange-500/40 transition-all group active:scale-95"
                                                                 >
-                                                                    <motion.div whileHover={{ scale: 1.1 }}>
-                                                                        <feature.icon className={`h-5 w-5 ${feature.color} group-hover:scale-110 transition-transform`} />
+                                                                    <motion.div 
+                                                                        whileHover={{ scale: 1.15, rotate: 5 }}
+                                                                        className="relative"
+                                                                    >
+                                                                        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/0 group-hover:from-orange-500/30 group-hover:to-orange-500/10 rounded-lg blur transition-all"></div>
+                                                                        <feature.icon className={`h-5 w-5 ${feature.color} group-hover:scale-110 transition-transform relative`} />
                                                                     </motion.div>
-                                                                    <div>
+                                                                    <div className="flex-1">
                                                                         <div className="text-sm font-semibold text-white group-hover:text-orange-300 transition-colors">
                                                                             {feature.name}
                                                                         </div>
-                                                                        <div className="text-xs text-gray-400">AI-powered tool</div>
+                                                                        <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">Intelligent tools</div>
                                                                     </div>
+                                                                    <motion.div
+                                                                        initial={{ opacity: 0, x: -5 }}
+                                                                        whileHover={{ opacity: 1, x: 5 }}
+                                                                    >
+                                                                        <ArrowRight className="h-4 w-4 text-orange-400/0 group-hover:text-orange-400 transition-colors" />
+                                                                    </motion.div>
                                                                 </Link>
                                                             </motion.div>
                                                         ))}

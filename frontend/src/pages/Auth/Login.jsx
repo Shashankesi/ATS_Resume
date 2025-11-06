@@ -166,19 +166,27 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Google Sign-In Button */}
+          {/* Google Sign-In Button - Premium */}
           <motion.button
             onClick={handleGoogleSignIn}
             disabled={isSubmitting}
             type="button"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full py-3 px-4 border-2 border-orange-500/70 bg-orange-500/10 hover:bg-orange-500/20 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition duration-200 flex justify-center items-center gap-3 shadow-lg hover:shadow-orange-500/50 hover:border-orange-400"
+            whileHover={{ scale: 1.03, y: -2 }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full py-4 px-6 bg-gradient-to-r from-white/10 to-white/5 hover:from-white/20 hover:to-white/15 border-2 border-white/30 hover:border-orange-400/70 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all duration-300 flex justify-center items-center gap-3 shadow-2xl hover:shadow-orange-500/50 backdrop-blur-sm group relative overflow-hidden"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12.545,10.866v3.418h5.051c-0.411,1.649-1.903,2.526-5.051,2.526c-3.049,0-5.555-2.5-5.555-5.549c0-3.049,2.506-5.548,5.555-5.548c1.383,0,2.657,0.508,3.644,1.382l2.463-2.462C15.404,3.205,13.894,2.427,12.102,2.427c-5.627,0-10.198,4.571-10.198,10.199c0,5.627,4.571,10.199,10.198,10.199c6.051,0,10.199-4.147,10.199-10.199c0-0.663-0.056-1.319-0.16-1.955H12.545z" fill="white"/>
-            </svg>
-            {isSubmitting ? 'Connecting to Google...' : 'Continue with Google'}
+            {/* Gradient overlay on hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 to-pink-500/0 group-hover:from-orange-500/10 group-hover:to-pink-500/10 transition-all duration-300"></div>
+            
+            {/* Content */}
+            <div className="relative flex items-center gap-3">
+              <svg className="w-6 h-6 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.545,10.866v3.418h5.051c-0.411,1.649-1.903,2.526-5.051,2.526c-3.049,0-5.555-2.5-5.555-5.549c0-3.049,2.506-5.548,5.555-5.548c1.383,0,2.657,0.508,3.644,1.382l2.463-2.462C15.404,3.205,13.894,2.427,12.102,2.427c-5.627,0-10.198,4.571-10.198,10.199c0,5.627,4.571,10.199,10.198,10.199c6.051,0,10.199-4.147,10.199-10.199c0-0.663-0.056-1.319-0.16-1.955H12.545z" fill="white"/>
+              </svg>
+              <span className="text-lg">
+                {isSubmitting ? 'Connecting...' : 'Continue with Google'}
+              </span>
+            </div>
           </motion.button>
 
           {/* Sign Up Link */}

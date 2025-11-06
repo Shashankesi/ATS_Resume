@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext';
 import NavbarEnhanced from './components/NavbarEnhanced';
 import Footer from './components/Footer';
 import ErrorBoundary from './components/ErrorBoundary';
+import PremiumLoader from './components/PremiumLoader';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import ResumeEditor from './pages/ResumeEditor';
@@ -24,14 +25,7 @@ function App() {
   const { loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0f172a] via-[#0a0e27] to-[#0f172a]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-slate-300 text-lg">Loading SmartCareer...</p>
-        </div>
-      </div>
-    );
+    return <PremiumLoader text="Loading SmartCareer AI..." />;
   }
 
   return (
