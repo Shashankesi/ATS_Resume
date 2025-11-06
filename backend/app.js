@@ -15,6 +15,7 @@ const resumeRoutes = require('./routes/resumeRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const achievementRoutes = require('./routes/achievementRoutes');
+const resumeImprovementRoutes = require('./routes/resumeImprovementRoutes');
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use('/api/resume', resumeRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/achievements', achievementRoutes);
+app.use('/api/resume-improvements', resumeImprovementRoutes);
 
 // Error Handler (Simple example)
 app.use((err, req, res, next) => {
