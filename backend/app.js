@@ -8,6 +8,7 @@ const {
     getCorsConfig, 
     globalLimiter 
 } = require('./middleware/security');
+const { swaggerSpec, swaggerUi } = require('./config/swagger');
 
 const authRoutes = require('./routes/authRoutes');
 const resumeRoutes = require('./routes/resumeRoutes');
@@ -55,6 +56,19 @@ app.get('/api/health', (req, res) => {
         env: process.env.NODE_ENV || 'development',
         time: new Date().toISOString()
     });
+});
+
+// Swagger API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+        url: '/api-docs/swagger.json',
+    },
+}));
+
+// Swagger JSON endpoint
+app.get('/api-docs/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
 });
 
 // API Routes
