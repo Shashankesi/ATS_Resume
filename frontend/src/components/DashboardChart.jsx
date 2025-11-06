@@ -1,12 +1,22 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const DashboardChart = ({ data }) => {
+const DashboardChart = ({ data = [] }) => {
     // Ensure data is suitable for the chart
+    if (!Array.isArray(data) || data.length === 0) {
+        return (
+            <div className="h-64 w-full flex items-center justify-center bg-slate-700/20 rounded-lg">
+                <p className="text-slate-400">No data available yet</p>
+            </div>
+        );
+    }
+
     const chartData = data
         .map(d => ({ 
-            name: d.name.length > 15 ? d.name.substring(0, 12) + '...' : d.name, 
-            score: d.score 
+            name: d.name && typeof d.name === 'string' 
+                ? (d.name.length > 15 ? d.name.substring(0, 12) + '...' : d.name)
+                : 'Resume',
+            score: typeof d.score === 'number' ? d.score : 0
         }))
         .slice(0, 5); // Show last 5 updates for simplicity
 

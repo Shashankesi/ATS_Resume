@@ -13,7 +13,8 @@ import {
   TrendingUp,
   Zap,
   Plus,
-  ChevronRight
+  ChevronRight,
+  Trash2
 } from 'lucide-react';
 import ErrorBoundary from '../components/ErrorBoundary';
 
@@ -104,6 +105,13 @@ const Dashboard = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const navigate = useNavigate();
 
+  // Safety check - redirect if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
   useEffect(() => {
     // Check if onboarding should be shown (only once on first login)
     const onboardingDone = localStorage.getItem('onboarding-done');
@@ -116,16 +124,17 @@ const Dashboard = () => {
   const fetchResumes = async () => {
     try {
       const response = await api.get('/resume');
-      setResumes(response.data);
+      setResumes(response.data || []);
     } catch (err) {
       console.error('Failed to fetch resumes:', err);
+      setResumes([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const chartData = resumes.map(r => ({
-    name: r.name,
+  const chartData = (resumes || []).map(r => ({
+    name: r.name || 'Untitled',
     score: r.latestATSScore?.score || Math.floor(Math.random() * (90 - 50 + 1) + 50),
   }));
 
@@ -137,7 +146,11 @@ const Dashboard = () => {
       const response = await api.post('/resume', {
         name: `Resume - ${new Date().toLocaleDateString()}`,
         data: {
-          profile: { name: user.name, email: user.email, summary: 'A professional summary goes here.' },
+          profile: { 
+            name: user?.name || 'Professional', 
+            email: user?.email || '', 
+            summary: 'A professional summary goes here.' 
+          },
           sections: [
             { _id: 'profile', type: 'profile', title: 'Profile', order: 0, content: {} },
             { _id: 'exp1', type: 'experience', title: 'Experience', order: 1, content: { jobs: [] } },
@@ -189,12 +202,31 @@ const Dashboard = () => {
 
   if (loading && resumes.length === 0) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gradient-to-br from-[#0f172a] via-[#0a0e27] to-[#0f172a]">
-        <div className="text-center">
-          <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }}>
-            <Loader2 className="w-12 h-12 text-blue-500" />
+      <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#0a0e27] to-[#0f172a] flex justify-center items-center relative overflow-hidden">
+        {/* Background Blobs */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full mix-blend-multiply filter blur-3xl"
+            animate={{ x: [0, 50, 0], y: [0, 30, 0] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute top-40 right-10 w-72 h-72 bg-blue-500/10 rounded-full mix-blend-multiply filter blur-3xl"
+            animate={{ x: [0, -50, 0], y: [0, -30, 0] }}
+            transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+          />
+        </div>
+
+        <div className="text-center relative z-10">
+          <motion.div 
+            animate={{ rotate: 360 }} 
+            transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+            className="mb-6 flex justify-center"
+          >
+            <Loader2 className="w-16 h-16 text-blue-500" />
           </motion.div>
-          <p className="text-slate-300 mt-4 text-lg">Loading Dashboard...</p>
+          <h2 className="text-2xl font-bold text-slate-100 mb-2">Loading your dashboard</h2>
+          <p className="text-slate-400">Setting up your AI career tools...</p>
         </div>
       </div>
     );
@@ -387,16 +419,70 @@ const Dashboard = () => {
 
           {resumes.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Suspense fallback={<SkeletonLoader />}>
-                <ErrorBoundary>
-                  <ResumeSection
-                    resumes={resumes}
-                    onUpload={handleUploadResume}
-                    onCreateNew={handleCreateNewResume}
-                    onDelete={(id) => setResumes(resumes.filter(r => r._id !== id))}
-                  />
-                </ErrorBoundary>
-              </Suspense>
+              {resumes.map((resume) => (
+                <motion.div
+                  key={resume._id}
+                  className="group relative overflow-hidden bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-6 hover:border-blue-500/50 transition-colors"
+                  whileHover={{ y: -4 }}
+                >
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between mb-4">
+                      <h3 className="text-lg font-bold text-slate-100 truncate flex-1">{resume.name || 'Untitled Resume'}</h3>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setResumes(resumes.filter(r => r._id !== resume._id))}
+                        className="p-2 rounded-lg hover:bg-red-500/20 text-red-400 hover:text-red-300 ml-2 flex-shrink-0"
+                      >
+                        <Trash2 size={18} />
+                      </motion.button>
+                    </div>
+
+                    {/* ATS Score */}
+                    <div className="mb-6">
+                      <div className="flex justify-between mb-2">
+                        <span className="text-xs text-slate-400 uppercase font-semibold">ATS Score</span>
+                        <span className="text-sm font-bold text-blue-400">
+                          {resume.latestATSScore?.score || 0}%
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-slate-700/50 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${resume.latestATSScore?.score || 0}%` }}
+                          transition={{ duration: 1, ease: 'easeOut' }}
+                          className="h-full bg-gradient-to-r from-blue-500 to-cyan-500"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Metadata */}
+                    <div className="text-xs text-slate-500 mb-4 space-y-1">
+                      <p>Created: {new Date(resume.createdAt).toLocaleDateString()}</p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-2">
+                      <motion.button
+                        onClick={() => navigate(`/resume/view/${resume._id}`)}
+                        className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        View
+                      </motion.button>
+                      <motion.button
+                        onClick={() => navigate(`/resume/edit/${resume._id}`)}
+                        className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        Edit
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           ) : (
             <motion.div
