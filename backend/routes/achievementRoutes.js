@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/authMiddleware');
 const {
   checkAndUnlockAchievements,
   getUserAchievements,
@@ -8,7 +8,7 @@ const {
 } = require('../controllers/achievementController');
 
 // All achievement routes require authentication
-router.use(authMiddleware);
+router.use(protect);
 
 // Check and unlock achievements
 router.post('/check', checkAndUnlockAchievements);
