@@ -48,9 +48,8 @@ const ResumeUploadModal = ({ open, onClose, onUploaded }) => {
 
     try {
       setLoading(true);
-      const res = await api.post('/resume/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      // Let the browser set the Content-Type (including boundary) for multipart/form-data
+      const res = await api.post('/resume/upload', formData);
       showToast.success('Resume uploaded successfully! 🎉');
       onUploaded && onUploaded(res.data.resume);
       onClose();
