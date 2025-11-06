@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Sparkles, 
@@ -12,16 +12,19 @@ import {
   Target,
   Trophy,
   Users,
-  TrendingUp
+  TrendingUp,
+  FileText,
+  Briefcase,
+  Award,
+  MessageCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ErrorBoundary from '../components/ErrorBoundary';
 
-// Lazy load Hero3D to prevent rendering errors
-const Hero3D = React.lazy(() => import('../components/Hero3D'));
-
 const Home = () => {
     const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+    const [hoveredFeature, setHoveredFeature] = useState(null);
     
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -42,27 +45,45 @@ const Home = () => {
     const features = [
         { 
           icon: Brain, 
-          title: 'AI-Powered Resume Builder', 
-          description: 'Create ATS-optimized resumes with AI suggestions and real-time improvements.',
-          color: 'from-purple-500 to-blue-500'
+          title: 'AI Resume Optimizer', 
+          description: 'Get instant ATS score and 16-point optimization checklist',
+          color: 'from-purple-500 to-blue-500',
+          details: '95% parse rate accuracy'
         },
         { 
           icon: Zap, 
-          title: 'Instant ATS Analysis', 
-          description: 'Get your ATS score in seconds and discover missing keywords.',
-          color: 'from-yellow-500 to-orange-500'
+          title: 'Resume Improver', 
+          description: 'AI-powered suggestions to enhance your resume content',
+          color: 'from-yellow-500 to-orange-500',
+          details: '+24% average improvement'
         },
         { 
           icon: Target, 
-          title: 'Smart Job Matching', 
-          description: 'Discover perfectly matched jobs based on your skills and experience.',
-          color: 'from-green-500 to-teal-500'
+          title: 'Skills Intelligence', 
+          description: 'Get market-based skill recommendations with salary data',
+          color: 'from-green-500 to-teal-500',
+          details: '+$40-80K earning potential'
         },
         { 
-          icon: Brain, 
-          title: 'Career AI Chat', 
-          description: 'Chat with our AI for instant career guidance and interview prep.',
-          color: 'from-pink-500 to-rose-500'
+          icon: Briefcase, 
+          title: 'Smart Job Matching', 
+          description: 'Discover perfectly matched jobs based on your profile',
+          color: 'from-pink-500 to-rose-500',
+          details: '10K+ jobs available'
+        },
+        { 
+          icon: MessageCircle, 
+          title: 'AI Career Chat', 
+          description: 'Chat with our AI for instant career guidance',
+          color: 'from-cyan-500 to-blue-500',
+          details: '24/7 available'
+        },
+        { 
+          icon: FileText, 
+          title: 'Cover Letter Generator', 
+          description: 'Create tailored cover letters in seconds',
+          color: 'from-indigo-500 to-purple-500',
+          details: 'Custom for each job'
         },
     ];
 
@@ -210,36 +231,60 @@ const Home = () => {
                         </p>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {features.map((feature, index) => (
-                            <motion.div
-                                key={index}
-                                className="group relative p-8 bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-orange-500/50 transition-all duration-300"
-                                variants={itemVariants}
-                                custom={index}
-                                whileHover={{ 
-                                    y: -10,
-                                    boxShadow: "0 20px 60px rgba(249, 115, 22, 0.3)"
-                                }}
-                            >
-                                {/* Icon Container */}
-                                <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} p-3 mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                                    <feature.icon className="h-full w-full text-white" />
-                                </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {features.map((feature, index) => {
+                            const Icon = feature.icon;
+                            const routeMap = {
+                                0: '/ats-checker',
+                                1: '/resume-improver',
+                                2: '/skills-suggestion',
+                                3: '/jobs',
+                                4: '/ai-chat',
+                                5: '/cover-letter'
+                            };
+                            const route = routeMap[index];
+                            
+                            return (
+                                <motion.div
+                                    key={index}
+                                    className="group relative p-8 bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl border border-white/10 rounded-2xl hover:border-orange-500/50 transition-all duration-300 cursor-pointer"
+                                    variants={itemVariants}
+                                    custom={index}
+                                    whileHover={{ 
+                                        y: -10,
+                                        boxShadow: "0 20px 60px rgba(249, 115, 22, 0.3)"
+                                    }}
+                                    onClick={() => {
+                                        if (route) navigate(route);
+                                    }}
+                                    onHoverStart={() => setHoveredFeature(index)}
+                                    onHoverEnd={() => setHoveredFeature(null)}
+                                >
+                                    {/* Icon Container */}
+                                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} p-3 mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                        <Icon className="h-full w-full text-white" />
+                                    </div>
 
-                                {/* Content */}
-                                <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                                <p className="text-gray-400 mb-6 leading-relaxed">{feature.description}</p>
+                                    {/* Content */}
+                                    <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                                    <p className="text-gray-400 mb-4 leading-relaxed">{feature.description}</p>
+                                    
+                                    {/* Details Badge */}
+                                    <p className="text-sm text-orange-400 font-semibold mb-4">{feature.details}</p>
 
-                                {/* Footer */}
-                                <div className="flex items-center text-orange-400 font-semibold group-hover:gap-2 transition-all">
-                                    Learn more <ArrowRight className="h-4 w-4 ml-2" />
-                                </div>
+                                    {/* Footer */}
+                                    <div className="flex items-center text-orange-400 font-semibold group-hover:gap-2 transition-all">
+                                        <motion.span animate={{ x: hoveredFeature === index ? 5 : 0 }} transition={{ duration: 0.3 }}>
+                                            Learn more
+                                        </motion.span>
+                                        <ArrowRight className="h-4 w-4 ml-2" />
+                                    </div>
 
-                                {/* Hover Glow */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300 -z-10`}></div>
-                            </motion.div>
-                        ))}
+                                    {/* Hover Glow */}
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300 -z-10`}></div>
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>

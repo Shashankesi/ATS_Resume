@@ -16,6 +16,9 @@ import ATSChecker from './pages/ATSChecker';
 import ResumeImprover from './pages/ResumeImprover';
 import SkillsSuggestion from './pages/SkillsSuggestion';
 import ResumeFeedback from './pages/ResumeFeedback';
+import Jobs from './pages/Jobs';
+import AIChat from './pages/AIChat';
+import CoverLetterGenerator from './pages/CoverLetterGenerator';
 
 function App() {
   const { loading } = useAuth();
@@ -49,6 +52,9 @@ function App() {
             <Route path="/resume-improver" element={<PrivateRoute element={ResumeImprover} />} />
             <Route path="/skills-suggestion" element={<PrivateRoute element={SkillsSuggestion} />} />
             <Route path="/resume-feedback" element={<PrivateRoute element={ResumeFeedback} />} />
+            <Route path="/jobs" element={<PrivateRoute element={Jobs} />} />
+            <Route path="/ai-chat" element={<PrivateRoute element={AIChat} />} />
+            <Route path="/cover-letter" element={<PrivateRoute element={CoverLetterGenerator} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

@@ -2,17 +2,27 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { Menu, X, User, LogOut, LayoutDashboard, FileText, Settings, Sun, Moon, Sparkles } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, FileText, Settings, Sun, Moon, Sparkles, ChevronDown, Zap, TrendingUp, MessageCircle, Briefcase } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NavbarEnhanced = () => {
     const { isAuthenticated, user, logout } = useAuth();
     const { isDark, toggleTheme } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
+    const [showFeaturesDropdown, setShowFeaturesDropdown] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
     const isActive = (href) => location.pathname === href;
+
+    const aiFeatures = [
+        { name: 'ATS Checker', href: '/ats-checker', icon: Zap, color: 'text-yellow-400' },
+        { name: 'Resume Improver', href: '/resume-improver', icon: Sparkles, color: 'text-purple-400' },
+        { name: 'Skills Intelligence', href: '/skills-suggestion', icon: TrendingUp, color: 'text-teal-400' },
+        { name: 'Job Recommendations', href: '/jobs', icon: Briefcase, color: 'text-green-400' },
+        { name: 'AI Career Chat', href: '/ai-chat', icon: MessageCircle, color: 'text-blue-400' },
+        { name: 'Cover Letter', href: '/cover-letter', icon: FileText, color: 'text-indigo-400' },
+    ];
 
     const handleLogout = () => {
         logout();
@@ -24,6 +34,7 @@ const NavbarEnhanced = () => {
         ? [
             { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
             { name: 'Resume', href: '/resume/new', icon: FileText },
+            { name: 'Features', href: '/#features' },
             { name: 'Admin', href: '/admin', icon: Settings, adminOnly: true },
         ]
         : [
@@ -80,6 +91,9 @@ const NavbarEnhanced = () => {
                                     variants={linkVariants}
                                     initial="rest"
                                     whileHover="hover"
+                                    className="relative"
+                                    onMouseEnter={() => item.name === 'Features' && isAuthenticated && setShowFeaturesDropdown(true)}
+                                    onMouseLeave={() => item.name === 'Features' && setShowFeaturesDropdown(false)}
                                 >
                                     <Link
                                         to={item.href}
@@ -91,6 +105,9 @@ const NavbarEnhanced = () => {
                                     >
                                         {item.icon && <item.icon className="h-4 w-4" />}
                                         <span>{item.name}</span>
+                                        {item.name === 'Features' && isAuthenticated && (
+                                            <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+                                        )}
                                         {isActive(item.href) && (
                                             <motion.div
                                                 layoutId="navbar-indicator"
@@ -99,6 +116,36 @@ const NavbarEnhanced = () => {
                                             />
                                         )}
                                     </Link>
+
+                                    {/* Features Dropdown */}
+                                    {item.name === 'Features' && isAuthenticated && (
+                                        <AnimatePresence>
+                                            {showFeaturesDropdown && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: -10 }}
+                                                    className="absolute top-full left-0 mt-2 w-56 bg-slate-800/95 backdrop-blur-xl border border-slate-700/30 rounded-lg shadow-xl overflow-hidden z-50"
+                                                >
+                                                    <div className="p-2">
+                                                        {aiFeatures.map((feature) => (
+                                                            <Link
+                                                                key={feature.href}
+                                                                to={feature.href}
+                                                                onClick={() => setShowFeaturesDropdown(false)}
+                                                                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-700/50 transition-colors group"
+                                                            >
+                                                                <feature.icon className={`h-4 w-4 ${feature.color}`} />
+                                                                <span className="text-sm text-slate-300 group-hover:text-white transition-colors">
+                                                                    {feature.name}
+                                                                </span>
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    )}
                                 </motion.div>
                             )
                         ))}
