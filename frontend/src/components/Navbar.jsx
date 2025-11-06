@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Menu, X, User, LogOut, LayoutDashboard, FileText, Settings, Sun, Moon } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, FileText, Settings, Sun, Moon, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Navbar = () => {
@@ -52,7 +52,7 @@ const Navbar = () => {
 
     return (
         <header 
-          className="fixed top-0 left-0 right-0 z-50 shadow-lg backdrop-blur-md dark:bg-card-dark/70 bg-white/80 transition-colors duration-300"
+          className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-[#0f172a]/80 via-[#0a0e27]/70 to-transparent backdrop-blur-xl border-b border-slate-700/30"
           role="banner"
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,11 +60,16 @@ const Navbar = () => {
                     {/* Logo */}
                     <Link 
                       to="/" 
-                      className="flex items-center space-x-2 text-xl font-bold text-primary-dark dark:text-primary-dark"
+                      className="flex items-center space-x-2 text-xl font-bold group"
                       aria-label="SmartCareer Home"
                     >
-                        <FileText className="h-6 w-6" aria-hidden="true" />
-                        <span>SmartCareer</span>
+                        <motion.div 
+                            className="bg-gradient-to-br from-blue-400 to-purple-500 p-2 rounded-xl"
+                            whileHover={{ scale: 1.1 }}
+                        >
+                            <Sparkles className="h-5 w-5 text-white" />
+                        </motion.div>
+                        <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">SmartCareer</span>
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -75,12 +80,15 @@ const Navbar = () => {
                                 <Link
                                     key={item.name}
                                     to={item.href}
-                                    className={`relative text-gray-600 dark:text-gray-300 hover:text-primary-dark dark:hover:text-primary-dark transition-colors duration-200 font-medium ${isActive(item.href) ? 'text-primary-dark' : ''}`}
+                                    className={`relative text-slate-400 hover:text-slate-100 transition-colors duration-200 font-medium group ${isActive(item.href) ? 'text-orange-400' : ''}`}
                                 >
                                     {item.name}
-                                    {isActive(item.href) && (
-                                        <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-primary-dark rounded-full" />
-                                    )}
+                                    <motion.span 
+                                        className={`absolute -bottom-2 left-0 h-0.5 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full ${isActive(item.href) ? 'w-full' : 'w-0'}`}
+                                        layoutId="underline"
+                                        animate={{ width: isActive(item.href) ? '100%' : '0%' }}
+                                        transition={{ duration: 0.3 }}
+                                    />
                                 </Link>
                             )
                         ))}
@@ -88,47 +96,59 @@ const Navbar = () => {
 
                     {/* Right side controls */}
                     <div className="flex items-center space-x-4">
-                        <button
+                        <motion.button
                             onClick={toggleTheme}
-                            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                            className="p-2 rounded-lg hover:bg-slate-700/50 transition"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
                             aria-label="Toggle dark mode"
                         >
-                            {isDarkMode ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5 text-slate-600" />}
-                        </button>
+                            {isDarkMode ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5 text-slate-400" />}
+                        </motion.button>
 
                         {isAuthenticated ? (
                             <div className="flex items-center space-x-4">
-                                <Link to="/dashboard" className="flex items-center space-x-2 text-sm font-medium dark:text-gray-200 hover:text-primary-dark">
-                                    <User className="h-5 w-5" />
+                                <Link to="/dashboard" className="flex items-center space-x-2 text-sm font-medium text-slate-300 hover:text-slate-100 transition">
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                                        {user?.name?.charAt(0).toUpperCase() || 'U'}
+                                    </div>
                                     <span className='hidden sm:inline'>{user?.name?.split(' ')[0] || 'User'}</span>
                                 </Link>
-                                <button
+                                <motion.button
                                     onClick={handleLogout}
-                                    className="px-3 py-1.5 text-sm font-medium text-white bg-accent rounded-lg hover:bg-orange-700 transition duration-150 shadow-md"
+                                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg hover:shadow-lg hover:shadow-orange-500/50 transition"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
-                                    <LogOut className="h-4 w-4 inline-block mr-1"/>
+                                    <LogOut className="h-4 w-4 inline-block mr-2"/>
                                     Logout
-                                </button>
+                                </motion.button>
                             </div>
                         ) : (
                             <div className="hidden md:block">
-                                <Link
-                                    to="/login"
-                                    className="px-4 py-2 text-sm font-medium text-white bg-primary-dark rounded-lg hover:bg-primary-light transition duration-150 shadow-md"
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
-                                    Sign In
-                                </Link>
+                                    <Link
+                                        to="/login"
+                                        className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition"
+                                    >
+                                        Sign In
+                                    </Link>
+                                </motion.div>
                             </div>
                         )}
 
                         {/* Mobile Menu Button */}
-                        <button
-                            className="md:hidden p-2 rounded-md dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+                        <motion.button
+                            className="md:hidden p-2 rounded-lg text-slate-300 hover:bg-slate-700/50 transition"
                             onClick={() => setIsOpen(!isOpen)}
+                            whileTap={{ scale: 0.9 }}
                             aria-label="Toggle navigation"
                         >
                             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </button>
+                        </motion.button>
                     </div>
                 </div>
             </div>
@@ -138,7 +158,7 @@ const Navbar = () => {
                 initial="hidden"
                 animate={isOpen ? "visible" : "hidden"}
                 variants={mobileMenuVariants}
-                className="md:hidden absolute top-16 right-0 w-64 h-[calc(100vh-64px)] bg-white dark:bg-card-dark shadow-xl p-4 transform transition-transform duration-300 ease-in-out"
+                className="md:hidden absolute top-16 right-0 w-64 h-[calc(100vh-64px)] bg-gradient-to-b from-slate-800/95 to-slate-900/95 backdrop-blur-xl shadow-xl p-4 border-l border-slate-700/50"
             >
                 <div className="space-y-4 pt-2">
                     {navItems.map((item) => (
@@ -147,7 +167,11 @@ const Navbar = () => {
                                 key={item.name}
                                 to={item.href}
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center space-x-3 p-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition"
+                                className={`flex items-center space-x-3 p-3 rounded-lg text-sm font-medium transition ${
+                                    isActive(item.href)
+                                        ? 'text-orange-400 bg-orange-500/10'
+                                        : 'text-slate-400 hover:text-slate-100 hover:bg-slate-700/50'
+                                }`}
                             >
                                 {item.icon && <item.icon className="h-5 w-5" />}
                                 <span>{item.name}</span>
@@ -158,7 +182,7 @@ const Navbar = () => {
                         <Link
                             to="/login"
                             onClick={() => setIsOpen(false)}
-                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-primary-dark hover:bg-primary-light transition duration-150"
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg hover:shadow-blue-500/50 transition mt-4"
                         >
                             Sign In
                         </Link>
