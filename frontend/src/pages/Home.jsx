@@ -124,17 +124,22 @@ const Home = () => {
                             >
                                 <Link
                                     to={isAuthenticated ? "/dashboard" : "/register"}
-                                    className="group px-8 py-4 bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold rounded-xl shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+                                    className="group px-8 py-4 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white font-bold rounded-xl shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 flex items-center justify-center gap-2"
                                 >
-                                    Get Started Free
-                                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                                    <motion.span
+                                        animate={{ x: [0, 3, 0] }}
+                                        transition={{ duration: 2, repeat: Infinity }}
+                                    >
+                                        Get Started Free
+                                    </motion.span>
+                                    <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
                                 </Link>
                                 <Link
                                     to="/features"
-                                    className="px-8 py-4 border-2 border-orange-500/50 text-white font-bold rounded-xl hover:bg-orange-500/10 transition-all duration-300 flex items-center justify-center gap-2"
+                                    className="px-8 py-4 border-2 border-orange-500/70 text-white font-bold rounded-xl hover:bg-orange-500/20 hover:border-orange-400 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-orange-500/30"
                                 >
                                     Explore Features
-                                    <ArrowRight className="h-5 w-5" />
+                                    <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform" />
                                 </Link>
                             </motion.div>
 

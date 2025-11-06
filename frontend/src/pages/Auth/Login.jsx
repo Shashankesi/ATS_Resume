@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, LogIn, Chrome, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Mail, Lock, LogIn, Eye, EyeOff, AlertCircle, Check } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { showToast } from '../../utils/toast';
 import { motion } from 'framer-motion';
@@ -170,12 +170,15 @@ const Login = () => {
           <motion.button
             onClick={handleGoogleSignIn}
             disabled={isSubmitting}
+            type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 px-4 border border-white/20 dark:border-slate-600/50 hover:border-orange-400/50 hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition duration-200 flex justify-center items-center gap-2"
+            className="w-full py-3 px-4 border-2 border-blue-500 bg-blue-500/10 hover:bg-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition duration-200 flex justify-center items-center gap-3 shadow-lg hover:shadow-blue-500/50"
           >
-            <Chrome className="w-5 h-5" />
-            {isSubmitting ? 'Connecting...' : 'Sign in with Google'}
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.545,10.866v3.418h5.051c-0.411,1.649-1.903,2.526-5.051,2.526c-3.049,0-5.555-2.5-5.555-5.549c0-3.049,2.506-5.548,5.555-5.548c1.383,0,2.657,0.508,3.644,1.382l2.463-2.462C15.404,3.205,13.894,2.427,12.102,2.427c-5.627,0-10.198,4.571-10.198,10.199c0,5.627,4.571,10.199,10.198,10.199c6.051,0,10.199-4.147,10.199-10.199c0-0.663-0.056-1.319-0.16-1.955H12.545z" fill="white"/>
+            </svg>
+            {isSubmitting ? 'Connecting...' : 'Continue with Google'}
           </motion.button>
 
           {/* Sign Up Link */}

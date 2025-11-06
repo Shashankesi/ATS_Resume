@@ -299,27 +299,28 @@ const Dashboard = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  whileHover={{ y: -4 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   {/* Background Card */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl border border-slate-700/50 group-hover:border-slate-600/50 transition-colors" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-slate-800/60 to-slate-900/60 rounded-2xl border border-slate-700/50 group-hover:border-orange-500/50 transition-all duration-300 shadow-xl group-hover:shadow-2xl group-hover:shadow-orange-500/20" />
                   
                   {/* Gradient Overlay on Hover */}
                   <motion.div
-                    className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity`}
+                    className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} rounded-2xl opacity-0 group-hover:opacity-15 transition-opacity`}
                   />
 
                   {/* Content */}
                   <div className="relative p-6 h-full flex flex-col">
                     {/* Icon Container */}
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${tool.gradient} p-0.5 mb-4 group-hover:scale-110 transition-transform`}>
-                      <div className="w-full h-full bg-slate-900/80 rounded-[10px] flex items-center justify-center">
-                        <Icon size={28} className="text-white" />
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${tool.gradient} p-0.5 mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      <div className="w-full h-full bg-slate-900/90 rounded-[14px] flex items-center justify-center">
+                        <Icon size={32} className="text-white" />
                       </div>
                     </div>
 
                     {/* Text */}
-                    <h3 className="text-lg font-bold text-slate-100 mb-2 group-hover:text-white transition-colors">
+                    <h3 className="text-lg font-bold text-slate-100 mb-2 group-hover:text-orange-300 transition-colors">
                       {tool.label}
                     </h3>
                     <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors flex-1">
@@ -328,8 +329,8 @@ const Dashboard = () => {
 
                     {/* Arrow */}
                     <div className="flex items-center gap-2 mt-4 text-slate-400 group-hover:text-orange-400 transition-colors">
-                      <span className="text-sm font-medium">Open Tool</span>
-                      <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                      <span className="text-sm font-medium">Open</span>
+                      <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </motion.button>
@@ -408,11 +409,11 @@ const Dashboard = () => {
             <motion.button
               onClick={handleCreateNewResume}
               disabled={loading}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-orange-500/50 disabled:opacity-50 transition-all"
-              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 via-orange-600 to-pink-500 rounded-xl font-semibold text-white hover:shadow-2xl hover:shadow-orange-500/50 disabled:opacity-50 transition-all shadow-lg"
+              whileHover={{ scale: 1.08, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Plus size={20} />
+              <Plus size={22} />
               New Resume
             </motion.button>
           </div>
@@ -462,20 +463,20 @@ const Dashboard = () => {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-3 mt-4">
                       <motion.button
                         onClick={() => navigate(`/resume/view/${resume._id}`)}
-                        className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold bg-blue-500/20 text-blue-300 hover:bg-blue-500/30 transition-colors"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-lg hover:shadow-blue-500/50 transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         View
                       </motion.button>
                       <motion.button
                         onClick={() => navigate(`/resume/edit/${resume._id}`)}
-                        className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold bg-slate-700/50 text-slate-300 hover:bg-slate-700 transition-colors"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        className="flex-1 px-3 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-lg hover:shadow-orange-500/50 transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                       >
                         Edit
                       </motion.button>
@@ -490,25 +491,26 @@ const Dashboard = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <FileText size={32} className="text-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <FileText size={40} className="text-white" />
               </div>
-              <h3 className="text-xl font-bold text-slate-100 mb-2">No Resumes Yet</h3>
-              <p className="text-slate-400 mb-6">Start by creating your first resume or uploading an existing one.</p>
-              <div className="flex gap-4 justify-center">
+              <h3 className="text-2xl font-bold text-slate-100 mb-3">No Resumes Yet</h3>
+              <p className="text-slate-400 mb-8 text-lg">Start by creating your first resume or uploading an existing one.</p>
+              <div className="flex gap-4 justify-center flex-wrap">
                 <motion.button
                   onClick={handleCreateNewResume}
                   disabled={loading}
-                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-orange-500/50 disabled:opacity-50 transition-all"
-                  whileHover={{ scale: 1.05 }}
+                  className="px-8 py-3 bg-gradient-to-r from-orange-500 via-orange-600 to-pink-500 rounded-xl font-semibold text-white hover:shadow-2xl hover:shadow-orange-500/50 disabled:opacity-50 transition-all shadow-lg flex items-center gap-2"
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
+                  <Plus size={20} />
                   Create Resume
                 </motion.button>
                 <motion.button
                   onClick={handleUploadResume}
-                  className="px-6 py-3 border border-slate-600 rounded-xl font-semibold text-slate-100 hover:bg-slate-700/50 transition-colors"
-                  whileHover={{ scale: 1.05 }}
+                  className="px-8 py-3 border-2 border-blue-500 bg-blue-500/10 rounded-xl font-semibold text-white hover:bg-blue-500/20 hover:shadow-lg hover:shadow-blue-500/50 transition-all"
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   Upload Resume
