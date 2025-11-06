@@ -47,12 +47,22 @@ const SkeletonLoader = () => (
 // AI Tools Data
 const AI_TOOLS = [
   {
-    id: 'summary',
-    label: 'Resume Summary',
-    description: 'AI-powered resume summary & optimization',
+    id: 'ats-checker',
+    label: 'ATS Checker',
+    description: 'Analyze & improve your ATS score',
+    icon: Zap,
+    gradient: 'from-yellow-500 to-orange-500',
+    color: 'yellow',
+    route: '/ats-checker'
+  },
+  {
+    id: 'resume-improver',
+    label: 'Resume Improver',
+    description: 'AI-powered resume enhancement',
     icon: Sparkles,
     gradient: 'from-purple-500 to-blue-500',
-    color: 'purple'
+    color: 'purple',
+    route: '/resume-improver'
   },
   {
     id: 'cover-letter',
@@ -61,14 +71,6 @@ const AI_TOOLS = [
     icon: FileText,
     gradient: 'from-blue-500 to-cyan-500',
     color: 'blue'
-  },
-  {
-    id: 'ats',
-    label: 'ATS Score Analyzer',
-    description: 'Analyze & improve your ATS score',
-    icon: Zap,
-    gradient: 'from-yellow-500 to-orange-500',
-    color: 'yellow'
   },
   {
     id: 'jobs',
@@ -172,21 +174,20 @@ const Dashboard = () => {
     setShowUpload(false);
   };
 
-  const handleToolClick = (toolId) => {
+  const handleToolClick = (tool) => {
+    // Check if tool has a route property
+    if (tool.route) {
+      navigate(tool.route);
+      return;
+    }
+
     // Central handler for when an AI tool card is clicked
-    switch (toolId) {
-      case 'ats':
-        // Open ATS modal
-        setActiveTool('ats');
-        break;
+    switch (tool.id) {
       case 'jobs':
         setActiveTool('jobs');
         break;
       case 'skills':
         setActiveTool('skills');
-        break;
-      case 'summary':
-        setActiveTool('summary');
         break;
       case 'cover-letter':
         setActiveTool('cover-letter');
@@ -294,7 +295,7 @@ const Dashboard = () => {
               return (
                 <motion.button
                   key={tool.id}
-                  onClick={() => handleToolClick(tool.id)}
+                  onClick={() => handleToolClick(tool)}
                   className="group relative h-full text-left"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
