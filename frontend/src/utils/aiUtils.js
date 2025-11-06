@@ -23,6 +23,9 @@ const mockResponsesClient = {
     }),
 };
 
+// Export mockResponsesClient so components can use client-side fallback directly when needed
+export { mockResponsesClient };
+
 /**
  * Executes a generic AI feature call by proxying through the backend.
  * @param {string} feature The feature name (e.g., 'generateSummary')

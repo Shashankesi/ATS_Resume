@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Zap, Target, Search, CheckCircle, Lightbulb, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { analyzeATS } from '../utils/aiUtils';
+import { analyzeATS, mockResponsesClient } from '../utils/aiUtils';
 import TextToSpeechButton from './UI/TextToSpeechButton';
 
 const ATSAnalyzer = ({ resumeData }) => {
