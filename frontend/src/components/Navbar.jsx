@@ -51,12 +51,19 @@ const Navbar = () => {
     };
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 shadow-lg backdrop-blur-md dark:bg-card-dark/70 bg-white/80 transition-colors duration-300">
+        <header 
+          className="fixed top-0 left-0 right-0 z-50 shadow-lg backdrop-blur-md dark:bg-card-dark/70 bg-white/80 transition-colors duration-300"
+          role="banner"
+        >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center space-x-2 text-xl font-bold text-primary-dark dark:text-primary-dark">
-                        <FileText className="h-6 w-6" />
+                    <Link 
+                      to="/" 
+                      className="flex items-center space-x-2 text-xl font-bold text-primary-dark dark:text-primary-dark"
+                      aria-label="SmartCareer Home"
+                    >
+                        <FileText className="h-6 w-6" aria-hidden="true" />
                         <span>SmartCareer</span>
                     </Link>
 
