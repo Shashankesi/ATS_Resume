@@ -65,6 +65,15 @@ const AI_TOOLS = [
     route: '/resume-improver'
   },
   {
+    id: 'skills',
+    label: 'Skills Suggestion',
+    description: 'Personalized skill recommendations',
+    icon: TrendingUp,
+    gradient: 'from-teal-500 to-emerald-500',
+    color: 'teal',
+    route: '/skills-suggestion'
+  },
+  {
     id: 'cover-letter',
     label: 'Cover Letter',
     description: 'Generate tailored cover letters',
@@ -79,14 +88,6 @@ const AI_TOOLS = [
     icon: Target,
     gradient: 'from-green-500 to-teal-500',
     color: 'green'
-  },
-  {
-    id: 'skills',
-    label: 'Skill Analyzer',
-    description: 'Identify skill gaps & growth areas',
-    icon: TrendingUp,
-    gradient: 'from-pink-500 to-rose-500',
-    color: 'pink'
   },
   {
     id: 'chat',
