@@ -5,17 +5,17 @@
 /* ============= MODERN FUTURISTIC THEME ============= */
 
 :root {
-  --primary: #3b82f6;
-  --primary-dark: #1e40af;
+  --primary: #ff8c00;
+  --primary-dark: #ff7000;
   --accent: #ec4899;
-  --accent-neon: #00ff88;
+  --accent-neon: #ff8c00;
   --bg-dark: #0f172a;
   --bg-darker: #0a0e27;
   --card-dark: #1e293b;
   --card-lighter: #334155;
   --border-light: rgba(226, 232, 240, 0.1);
   --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.2);
+  --shadow-glow: 0 0 30px rgba(255, 140, 0, 0.3);
 }
 
 /* Base dark theme */
@@ -37,8 +37,8 @@
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.2); }
-  50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.3); }
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 140, 0, 0.4), 0 0 40px rgba(255, 140, 0, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(255, 140, 0, 0.6), 0 0 60px rgba(255, 140, 0, 0.3); }
 }
 
 @keyframes gradient-shift {

@@ -175,24 +175,64 @@ const Home = () => {
                             </motion.div>
                         </motion.div>
 
-                        {/* Right - 3D Visual */}
+                        {/* Right - Hero Image */}
                         <motion.div 
-                            className="h-80 md:h-96 w-full max-w-md mx-auto relative"
+                            className="h-80 md:h-full w-full max-w-md mx-auto relative min-h-96"
                             variants={itemVariants}
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-pink-500/20 rounded-3xl blur-3xl"></div>
-                            <ErrorBoundary>
-                                <React.Suspense fallback={
-                                    <div className="relative w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl flex items-center justify-center border border-orange-500/20">
-                                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity }} className="text-center">
-                                            <Rocket className="h-16 w-16 text-orange-500 mx-auto mb-4" />
-                                            <p className="text-gray-300">Loading 3D Scene...</p>
+                            {/* Gradient overlay background */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 via-purple-500/20 to-pink-500/30 rounded-3xl blur-3xl"></div>
+                            
+                            {/* Main card with glassmorphism */}
+                            <div className="relative w-full h-full bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl rounded-3xl border border-white/20 overflow-hidden shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 flex flex-col items-center justify-center p-8">
+                                {/* Resume mockup visual */}
+                                <motion.div 
+                                    className="w-full space-y-3"
+                                    animate={{ y: [0, -5, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity }}
+                                >
+                                    {/* Resume preview */}
+                                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10 space-y-2">
+                                        <div className="h-3 bg-orange-400/40 rounded w-3/4"></div>
+                                        <div className="h-2 bg-white/20 rounded w-full"></div>
+                                        <div className="h-2 bg-white/20 rounded w-5/6"></div>
+                                        <div className="space-y-2 mt-3 pt-3 border-t border-white/10">
+                                            <div className="h-2 bg-white/15 rounded w-4/5"></div>
+                                            <div className="h-2 bg-white/15 rounded w-3/4"></div>
+                                            <div className="h-2 bg-white/15 rounded w-5/6"></div>
+                                        </div>
+                                    </div>
+
+                                    {/* Icons representing features */}
+                                    <div className="grid grid-cols-3 gap-2 mt-4">
+                                        <motion.div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 flex items-center justify-center" whileHover={{ scale: 1.05 }}>
+                                            <Zap className="w-5 h-5 text-yellow-400" />
+                                        </motion.div>
+                                        <motion.div className="bg-purple-500/20 border border-purple-500/30 rounded-lg p-3 flex items-center justify-center" whileHover={{ scale: 1.05 }}>
+                                            <Sparkles className="w-5 h-5 text-purple-400" />
+                                        </motion.div>
+                                        <motion.div className="bg-teal-500/20 border border-teal-500/30 rounded-lg p-3 flex items-center justify-center" whileHover={{ scale: 1.05 }}>
+                                            <Target className="w-5 h-5 text-teal-400" />
                                         </motion.div>
                                     </div>
-                                }>
-                                    <Hero3D />
-                                </React.Suspense>
-                            </ErrorBoundary>
+
+                                    {/* Stats badges */}
+                                    <motion.div className="flex gap-2 mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+                                        <div className="flex-1 bg-gradient-to-r from-orange-500/20 to-orange-500/10 border border-orange-500/30 rounded-lg p-2 text-center">
+                                            <div className="text-xs font-bold text-orange-300">92%</div>
+                                            <div className="text-xs text-gray-400">ATS Match</div>
+                                        </div>
+                                        <div className="flex-1 bg-gradient-to-r from-green-500/20 to-green-500/10 border border-green-500/30 rounded-lg p-2 text-center">
+                                            <div className="text-xs font-bold text-green-300">+40K</div>
+                                            <div className="text-xs text-gray-400">Salary Boost</div>
+                                        </div>
+                                    </motion.div>
+                                </motion.div>
+
+                                {/* Decorative elements */}
+                                <div className="absolute top-4 right-4 w-2 h-2 bg-orange-400 rounded-full opacity-50"></div>
+                                <div className="absolute bottom-4 left-4 w-3 h-3 bg-purple-400 rounded-full opacity-30"></div>
+                            </div>
                         </motion.div>
                     </div>
                 </div>
