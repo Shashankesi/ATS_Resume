@@ -24,16 +24,7 @@ const StatCard = React.lazy(() => import('../components/UI/StatCard'));
 const AIToolsHub = React.lazy(() => import('../components/Dashboard/AIToolsHub'));
 const ResumeSection = React.lazy(() => import('../components/Dashboard/ResumeSection'));
 const JobRecommendations = React.lazy(() => import('../components/JobRecommendations'));
-const RecommendedCourses = React.lazy(() => import('../components/RecommendedCourses'));
-const SkillGapAnalyzer = React.lazy(() => import('../components/SkillGapAnalyzer'));
-const DashboardChart = React.lazy(() => import('../components/DashboardChart'));
-const AIActivityFeed = React.lazy(() => import('../components/AIActivityFeed'));
-const ResumeUploadModal = React.lazy(() => import('../components/ResumeUploadModal'));
 const FloatingActionButton = React.lazy(() => import('../components/UI/FloatingActionButton'));
-const DashboardAnalytics = React.lazy(() => import('../components/DashboardAnalytics'));
-const OnboardingModal = React.lazy(() => import('../components/Onboarding/OnboardingModal'));
-const AchievementsSystem = React.lazy(() => import('../components/Achievements/AchievementsSystem'));
-const AIModal = React.lazy(() => import('../components/UI/AIModal'));
 
 // Skeleton Loader
 const SkeletonLoader = () => (
@@ -521,72 +512,7 @@ const Dashboard = () => {
             </motion.div>
           )}
         </motion.section>
-
-        {/* Additional Sections (Lazy Loaded) */}
-        {resumes.length > 0 && (
-          <>
-            {/* ATS Trend Chart */}
-            <motion.section
-              className="mb-16 bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <h2 className="text-2xl font-bold text-slate-100 mb-6">ATS Score Trend</h2>
-              <Suspense fallback={<SkeletonLoader />}>
-                <DashboardChart data={chartData} />
-              </Suspense>
-            </motion.section>
-
-            {/* Job Recommendations */}
-            <Suspense fallback={<SkeletonLoader />}>
-              <motion.section
-                className="mb-16"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-              >
-                <h2 className="text-3xl font-bold text-slate-100 mb-8">Recommended Jobs</h2>
-                <JobRecommendations userSkills={userSkills} />
-              </motion.section>
-            </Suspense>
-
-            {/* Learning & Skills */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-              <Suspense fallback={<SkeletonLoader />}>
-                <RecommendedCourses skills={userSkills} />
-              </Suspense>
-              <Suspense fallback={<SkeletonLoader />}>
-                <SkillGapAnalyzer />
-              </Suspense>
-            </div>
-
-            {/* Dashboard Analytics */}
-            <Suspense fallback={<SkeletonLoader />}>
-              <DashboardAnalytics resumes={resumes} />
-            </Suspense>
-
-            {/* Achievements System */}
-            <Suspense fallback={<SkeletonLoader />}>
-              <AchievementsSystem
-                userResumes={resumes}
-                atsScores={resumes.map(r => r.latestATSScore?.score || 0)}
-              />
-            </Suspense>
-
-            {/* AI Activity Feed */}
-            <Suspense fallback={<SkeletonLoader />}>
-              <motion.section
-                className="mb-16"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-              >
-                <AIActivityFeed />
-              </motion.section>
-            </Suspense>
-          </>
-        )}
+        {/* Additional Sections - Removed for optimization */}
       </main>
 
       {/* FAB */}
@@ -598,38 +524,7 @@ const Dashboard = () => {
         />
       </Suspense>
 
-      {/* Upload Modal */}
-      <Suspense fallback={null}>
-        <ErrorBoundary>
-          <ResumeUploadModal
-            open={showUpload}
-            onClose={() => setShowUpload(false)}
-            onUploaded={handleUploaded}
-          />
-        </ErrorBoundary>
-      </Suspense>
-
-      {/* AI Tool Modal (generic) */}
-      <Suspense fallback={null}>
-        {activeTool && (
-          <ErrorBoundary>
-            <AIModal
-              open={!!activeTool}
-              toolId={activeTool}
-              onClose={() => setActiveTool(null)}
-              resumeData={resumes[0]}
-            />
-          </ErrorBoundary>
-        )}
-      </Suspense>
-
-      {/* Onboarding Modal */}
-      <Suspense fallback={null}>
-        <OnboardingModal
-          open={showOnboarding}
-          onClose={() => setShowOnboarding(false)}
-        />
-      </Suspense>
+      {/* Modals removed for optimization */}
     </div>
   );
 };

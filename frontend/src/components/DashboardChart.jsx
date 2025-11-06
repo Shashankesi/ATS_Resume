@@ -1,16 +1,21 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { motion } from 'framer-motion';
+import { TrendingUp } from 'lucide-react';
 
 const DashboardChart = ({ data = [] }) => {
     // Ensure data is suitable for the chart
     if (!Array.isArray(data) || data.length === 0) {
         return (
-            <div className="h-64 w-full flex items-center justify-center bg-slate-700/20 rounded-lg">
-                <p className="text-slate-400">No data available yet</p>
+            <div className="h-64 w-full flex items-center justify-center bg-gradient-to-br from-slate-700/20 to-slate-800/20 rounded-2xl border border-slate-700/50">
+                <div className="text-center">
+                    <TrendingUp className="w-12 h-12 text-slate-400 mx-auto mb-3 opacity-50" />
+                    <p className="text-slate-400">No data available yet</p>
+                </div>
             </div>
         );
     }
 
+    // Create simple bar chart visualization
     const chartData = data
         .map(d => ({ 
             name: d.name && typeof d.name === 'string' 
@@ -18,25 +23,37 @@ const DashboardChart = ({ data = [] }) => {
                 : 'Resume',
             score: typeof d.score === 'number' ? d.score : 0
         }))
-        .slice(0, 5); // Show last 5 updates for simplicity
+        .slice(0, 5);
+
+    const maxScore = Math.max(...chartData.map(d => d.score), 100);
 
     return (
-        <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                    data={chartData}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
-                    <XAxis dataKey="name" stroke="#cbd5e1" interval={0} angle={-30} textAnchor="end" height={40} />
-                    <YAxis domain={[50, 100]} stroke="#cbd5e1" />
-                    <Tooltip 
-                        contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155' }} 
-                        labelStyle={{ color: '#3b82f6' }}
-                    />
-                    <Line type="monotone" dataKey="score" stroke="#f97316" strokeWidth={2} activeDot={{ r: 8 }} />
-                </LineChart>
-            </ResponsiveContainer>
+        <div className="h-64 w-full bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-slate-700/50">
+            <div className="h-full flex items-end justify-around gap-2">
+                {chartData.map((item, idx) => (
+                    <motion.div
+                        key={idx}
+                        className="flex flex-col items-center flex-1"
+                        initial={{ height: 0 }}
+                        animate={{ height: '100%' }}
+                        transition={{ delay: idx * 0.1 }}
+                    >
+                        <div className="text-xs text-slate-300 font-semibold mb-2 text-center truncate w-full">
+                            {item.score}
+                        </div>
+                        <motion.div
+                            className="w-full bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-lg"
+                            initial={{ height: 0 }}
+                            animate={{ height: `${(item.score / maxScore) * 100}%` }}
+                            transition={{ delay: idx * 0.1, duration: 0.5 }}
+                            whileHover={{ backgroundColor: 'rgb(249, 115, 22)' }}
+                        />
+                        <div className="text-xs text-slate-400 mt-2 text-center truncate w-full">
+                            {item.name}
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
         </div>
     );
 };
