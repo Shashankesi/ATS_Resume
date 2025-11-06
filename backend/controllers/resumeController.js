@@ -11,6 +11,8 @@ const {
     calculateATSScore
 } = require('../utils/resumeParser');
 
+const { getStorageBucket } = require('../utils/firebaseAdmin');
+
 // Helper function to generate a unique slug
 const generateSlug = (name) => {
     return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 50) + '-' + Math.random().toString(36).substring(2, 6);
@@ -134,7 +136,7 @@ const uploadResume = async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const { originalname, filename, path: filePath, size } = req.file;
+    const { originalname, filename, path: filePath, size } = req.file;
         const ext = path.extname(originalname).toLowerCase();
 
         // Validate file type
@@ -143,6 +145,33 @@ const uploadResume = async (req, res) => {
             return res.status(400).json({ 
                 message: `Invalid file type. Supported types: ${allowedExtensions.join(', ')}` 
             });
+        }
+
+        // Attempt to upload to Firebase Storage (if configured). Falls back to local uploads.
+        let uploadedUrl = `/uploads/${filename}`;
+        try {
+            const bucket = getStorageBucket();
+            if (bucket) {
+                const destination = `resumes/${req.user._id}/${filename}`;
+                // Upload file to bucket
+                await bucket.upload(filePath, { destination, metadata: { contentType: req.file.mimetype } });
+                const fileRef = bucket.file(destination);
+                // Try to create a long-lived signed URL (1 year) for read access
+                try {
+                    const [signedUrl] = await fileRef.getSignedUrl({ action: 'read', expires: Date.now() + 1000 * 60 * 60 * 24 * 365 });
+                    uploadedUrl = signedUrl;
+                } catch (e) {
+                    // If signed URL fails, try making public (best-effort) and construct public URL
+                    try {
+                        await fileRef.makePublic();
+                        uploadedUrl = `https://storage.googleapis.com/${bucket.name}/${destination}`;
+                    } catch (errMakePublic) {
+                        console.warn('Could not make file public or generate signed URL:', errMakePublic.message);
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('Firebase upload skipped/failure, using local file. Reason:', err && err.message);
         }
 
         // Extract text from resume
@@ -197,14 +226,13 @@ const uploadResume = async (req, res) => {
 
         const createdResume = await resume.save();
         await User.findByIdAndUpdate(req.user._id, { $push: { resumeRefs: createdResume._id } });
-
         res.status(201).json({
             message: 'File uploaded and analyzed successfully',
             file: {
                 originalname,
                 filename,
                 size,
-                url: `/uploads/${filename}`,
+                url: uploadedUrl,
                 format: ext.slice(1).toUpperCase(),
             },
             resume: createdResume,

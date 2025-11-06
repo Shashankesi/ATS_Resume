@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 import { motion } from 'framer-motion';
 import { FileText, Loader2 } from 'lucide-react';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 // Lazy load heavy components
 const DashboardHero = React.lazy(() => import('../components/Dashboard/DashboardHero'));
@@ -203,7 +204,9 @@ const Dashboard = () => {
 
         {/* AI Tools Hub */}
         <Suspense fallback={<SkeletonLoader />}>
-          <AIToolsHub onToolClick={handleToolClick} />
+          <ErrorBoundary>
+            <AIToolsHub onToolClick={handleToolClick} />
+          </ErrorBoundary>
         </Suspense>
 
         {/* Resumes Section */}
@@ -276,21 +279,25 @@ const Dashboard = () => {
 
       {/* Upload Modal */}
       <Suspense fallback={null}>
-        <ResumeUploadModal
-          open={showUpload}
-          onClose={() => setShowUpload(false)}
-          onUploaded={handleUploaded}
-        />
+        <ErrorBoundary>
+          <ResumeUploadModal
+            open={showUpload}
+            onClose={() => setShowUpload(false)}
+            onUploaded={handleUploaded}
+          />
+        </ErrorBoundary>
       </Suspense>
       {/* AI Tool Modal (generic) */}
       <Suspense fallback={null}>
         {activeTool && (
-          <AIModal
-            open={!!activeTool}
-            toolId={activeTool}
-            onClose={() => setActiveTool(null)}
-            resumeData={resumes[0]}
-          />
+          <ErrorBoundary>
+            <AIModal
+              open={!!activeTool}
+              toolId={activeTool}
+              onClose={() => setActiveTool(null)}
+              resumeData={resumes[0]}
+            />
+          </ErrorBoundary>
         )}
       </Suspense>
       {/* Onboarding Modal */}

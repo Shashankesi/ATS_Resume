@@ -20,9 +20,9 @@ const storage = multer.diskStorage({
   }
 });
 
-// File filter to allow pdf/doc/docx only
+// File filter to allow pdf/doc/docx/txt only
 function fileFilter(req, file, cb) {
-  const allowed = ['.pdf', '.doc', '.docx'];
+  const allowed = ['.pdf', '.doc', '.docx', '.txt'];
   const ext = path.extname(file.originalname).toLowerCase();
   if (!allowed.includes(ext)) {
     return cb(new Error('Only PDF, DOC, and DOCX files are allowed'));

@@ -3,18 +3,24 @@ const admin = require('firebase-admin');
 let serviceAccount;
 try {
     // Parse the JSON config string from the environment variable
-    serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_CONFIG);
+    serviceAccount = process.env.FIREBASE_ADMIN_CONFIG ? JSON.parse(process.env.FIREBASE_ADMIN_CONFIG) : null;
 } catch (error) {
     console.error('🚨 Failed to parse FIREBASE_ADMIN_CONFIG. Google Sign-In verification will not work.', error);
-    serviceAccount = { projectId: 'mock-project-id' }; 
+    serviceAccount = null;
 }
 
-// Initialize Firebase Admin SDK
+// Initialize Firebase Admin SDK safely (avoid double-init warnings)
 try {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-    });
-    console.log('✅ Firebase Admin SDK Initialized.');
+    if (!admin.apps.length) {
+        const initConfig = {};
+        if (serviceAccount) initConfig.credential = admin.credential.cert(serviceAccount);
+        // Optional: set storageBucket from env or infer from service account
+        if (process.env.FIREBASE_STORAGE_BUCKET) initConfig.storageBucket = process.env.FIREBASE_STORAGE_BUCKET;
+        admin.initializeApp(initConfig);
+        console.log('✅ Firebase Admin SDK Initialized.');
+    } else {
+        console.log('ℹ️ Firebase Admin already initialized.');
+    }
 } catch (error) {
     console.warn('⚠️ Firebase Admin SDK initialization failed (is it already initialized?). Google Auth might fail if config is wrong.');
 }
@@ -34,7 +40,20 @@ const verifyIdToken = async (idToken) => {
     }
 };
 
+// Helper to get a Storage bucket (returns null if not configured)
+const getStorageBucket = () => {
+    try {
+        const bucketName = process.env.FIREBASE_STORAGE_BUCKET || (serviceAccount && serviceAccount.project_id ? `${serviceAccount.project_id}.appspot.com` : null);
+        if (!bucketName) return null;
+        return admin.storage().bucket(bucketName);
+    } catch (err) {
+        console.warn('Firebase storage not available:', err && err.message);
+        return null;
+    }
+};
+
 module.exports = {
     admin,
     verifyIdToken,
+    getStorageBucket,
 };
