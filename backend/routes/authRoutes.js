@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, authUser, getProfile, googleSignIn, getMe } = require('../controllers/authController');
+const { registerUser, authUser, getProfile, googleSignIn, getMe, refreshToken } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { authLimiter } = require('../middleware/security');
 const { 
@@ -13,6 +13,7 @@ const router = express.Router();
 // Local Auth with validation and rate limiting
 router.post('/register', authLimiter, validateRegister, registerUser);
 router.post('/login', authLimiter, validateLogin, authUser);
+router.post('/refresh', refreshToken);
 
 // Google Sign-In with validation
 router.post('/google', authLimiter, validateGoogleSignIn, googleSignIn);

@@ -2,9 +2,16 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { verifyIdToken } = require('../utils/firebaseAdmin');
 
-// Helper to generate a local JWT
+// Helper to generate a local JWT (short-lived)
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '7d', // Short-lived access token
+    });
+};
+
+// Helper to generate a refresh token (long-lived)
+const generateRefreshToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET + '_REFRESH', {
         expiresIn: '30d',
     });
 };
@@ -27,6 +34,7 @@ const registerUser = async (req, res) => {
             email: user.email,
             role: user.role,
             token: generateToken(user._id),
+            refreshToken: generateRefreshToken(user._id),
         });
     } else {
         res.status(400).json({ message: 'Invalid user data' });
@@ -45,6 +53,7 @@ const authUser = async (req, res) => {
             email: user.email,
             role: user.role,
             token: generateToken(user._id),
+            refreshToken: generateRefreshToken(user._id),
         });
     } else {
         res.status(401).json({ message: 'Invalid email or password' });
@@ -108,11 +117,43 @@ const getMe = (req, res) => {
     });
 };
 
+/**
+ * Refresh JWT Token
+ * @route POST /api/auth/refresh
+ */
+const refreshToken = async (req, res) => {
+    try {
+        const { refreshToken: clientRefreshToken } = req.body;
+        
+        if (!clientRefreshToken) {
+            return res.status(401).json({ message: 'Refresh token required' });
+        }
+
+        // Verify refresh token
+        const decoded = jwt.verify(clientRefreshToken, process.env.JWT_SECRET + '_REFRESH');
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+
+        // Issue new access token
+        const newAccessToken = generateToken(user._id);
+        res.json({
+            token: newAccessToken,
+            refreshToken: generateRefreshToken(user._id), // Optional: rotate refresh token
+        });
+    } catch (error) {
+        res.status(401).json({ message: 'Invalid or expired refresh token', error: error.message });
+    }
+};
+
 
 module.exports = {
     registerUser,
     authUser,
     googleSignIn,
     getProfile,
-    getMe
+    getMe,
+    refreshToken,
 };
