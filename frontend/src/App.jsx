@@ -15,6 +15,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import ATSChecker from './pages/ATSChecker';
 import ResumeImprover from './pages/ResumeImprover';
 import SkillsSuggestion from './pages/SkillsSuggestion';
+import ResumeFeedback from './pages/ResumeFeedback';
 
 function App() {
   const { loading } = useAuth();
@@ -47,6 +48,7 @@ function App() {
             <Route path="/ats-checker" element={<PrivateRoute element={ATSChecker} />} />
             <Route path="/resume-improver" element={<PrivateRoute element={ResumeImprover} />} />
             <Route path="/skills-suggestion" element={<PrivateRoute element={SkillsSuggestion} />} />
+            <Route path="/resume-feedback" element={<PrivateRoute element={ResumeFeedback} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
