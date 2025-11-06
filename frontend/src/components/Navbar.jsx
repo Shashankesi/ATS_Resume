@@ -108,16 +108,19 @@ const Navbar = () => {
 
                         {isAuthenticated ? (
                             <div className="flex items-center space-x-4">
-                                <Link to="/dashboard" className="flex items-center space-x-2 text-sm font-medium text-slate-300 hover:text-slate-100 transition">
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                                <Link to="/dashboard" className="flex items-center space-x-3 text-sm font-medium text-slate-300 hover:text-slate-100 transition px-3 py-2 rounded-lg hover:bg-slate-700/30">
+                                    <motion.div 
+                                        className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 flex items-center justify-center text-white text-xs font-bold shadow-lg"
+                                        whileHover={{ scale: 1.1, rotate: 5 }}
+                                    >
                                         {user?.name?.charAt(0).toUpperCase() || 'U'}
-                                    </div>
+                                    </motion.div>
                                     <span className='hidden sm:inline'>{user?.name?.split(' ')[0] || 'User'}</span>
                                 </Link>
                                 <motion.button
                                     onClick={handleLogout}
-                                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg hover:shadow-lg hover:shadow-orange-500/50 transition"
-                                    whileHover={{ scale: 1.05 }}
+                                    className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-pink-500 rounded-lg hover:shadow-lg hover:shadow-orange-500/50 transition"
+                                    whileHover={{ scale: 1.05, y: -2 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
                                     <LogOut className="h-4 w-4 inline-block mr-2"/>
@@ -132,7 +135,7 @@ const Navbar = () => {
                                 >
                                     <Link
                                         to="/login"
-                                        className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition"
+                                        className="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg hover:shadow-lg hover:shadow-blue-500/50 transition"
                                     >
                                         Sign In
                                     </Link>
