@@ -9,7 +9,10 @@ const {
 const { 
     handleAiRequest,
     getJobRecommendations,
-    getHistory
+    getHistory,
+    applyImprovement,
+    generateImprovements,
+    downloadResume
 } = require('../controllers/aiController'); 
 
 const router = express.Router();
@@ -53,5 +56,10 @@ router.post('/skill-gap', (req, res, next) => {
     req.body.feature = 'skillGap';
     return validateAiRequest(req, res, () => handleAiRequest(req, res, next));
 });
+
+// Resume Improvement Endpoints
+router.post('/improvements/apply', applyImprovement);
+router.post('/improvements/generate', generateImprovements);
+router.get('/resume/download/:resumeId', downloadResume);
 
 module.exports = router;

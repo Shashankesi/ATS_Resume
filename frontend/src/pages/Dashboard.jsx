@@ -14,7 +14,8 @@ import {
   Zap,
   Plus,
   ChevronRight,
-  Trash2
+  Trash2,
+  Upload
 } from 'lucide-react';
 import ErrorBoundary from '../components/ErrorBoundary';
 
@@ -392,23 +393,35 @@ const Dashboard = () => {
 
         {/* Resumes Section */}
         <motion.section
-          className="mb-16"
+          className="mb-32 pb-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <h2 className="text-3xl font-bold text-slate-100">Your Resumes</h2>
-            <motion.button
-              onClick={handleCreateNewResume}
-              disabled={loading}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 via-orange-600 to-pink-500 rounded-xl font-semibold text-white hover:shadow-2xl hover:shadow-orange-500/50 disabled:opacity-50 transition-all shadow-lg"
-              whileHover={{ scale: 1.08, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Plus size={22} />
-              New Resume
-            </motion.button>
+            <div className="flex gap-3 flex-wrap">
+              <motion.button
+                onClick={handleCreateNewResume}
+                disabled={loading}
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 via-orange-600 to-pink-500 rounded-xl font-semibold text-white hover:shadow-2xl hover:shadow-orange-500/50 disabled:opacity-50 transition-all shadow-lg whitespace-nowrap"
+                whileHover={{ scale: 1.08, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Plus size={22} />
+                New Resume
+              </motion.button>
+              <motion.button
+                onClick={handleUploadResume}
+                disabled={loading}
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl font-semibold text-white hover:shadow-2xl hover:shadow-blue-500/50 disabled:opacity-50 transition-all shadow-lg whitespace-nowrap"
+                whileHover={{ scale: 1.08, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Upload size={22} />
+                Upload Resume
+              </motion.button>
+            </div>
           </div>
 
           {resumes.length > 0 ? (

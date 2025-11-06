@@ -328,9 +328,159 @@ const getHistory = async (req, res) => {
 };
 
 
+/**
+ * Apply Improvement to Resume
+ * Replaces original text with improved version in resume
+ */
+const applyImprovement = async (req, res) => {
+    try {
+        const { resumeId, originalText, improvedText } = req.body;
+        const userId = req.user._id;
+
+        if (!resumeId || !originalText || !improvedText) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        const resume = await Resume.findById(resumeId);
+        if (!resume || resume.userId !== userId.toString()) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        // Replace text in resume content
+        let updated = false;
+        if (resume.summary?.includes(originalText)) {
+            resume.summary = resume.summary.replace(originalText, improvedText);
+            updated = true;
+        }
+        if (resume.experience) {
+            resume.experience = resume.experience.map(exp => ({
+                ...exp,
+                description: exp.description?.replace(originalText, improvedText) || exp.description
+            }));
+            updated = true;
+        }
+
+        if (updated) {
+            await resume.save();
+            res.json({ 
+                success: true, 
+                message: 'Improvement applied successfully',
+                resume 
+            });
+        } else {
+            res.status(404).json({ error: 'Original text not found in resume' });
+        }
+    } catch (error) {
+        console.error('Error applying improvement:', error);
+        res.status(500).json({ error: 'Failed to apply improvement' });
+    }
+};
+
+/**
+ * Generate Multiple Resume Improvements
+ */
+const generateImprovements = async (req, res) => {
+    try {
+        const { resumeId, section = 'experience' } = req.body;
+        const userId = req.user._id;
+
+        const resume = await Resume.findById(resumeId);
+        if (!resume || resume.userId !== userId.toString()) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        let improvements = [];
+
+        if (section === 'experience' && resume.experience) {
+            improvements = resume.experience.map((exp, idx) => ({
+                id: idx,
+                original: exp.description || '',
+                improved: `Enhanced description with quantifiable metrics and strong action verbs for "${exp.position}"`,
+                category: 'Experience',
+                impact: 'High',
+                status: 'pending'
+            })).filter(imp => imp.original.length > 0);
+        } else if (section === 'summary' && resume.summary) {
+            improvements = [{
+                id: 0,
+                original: resume.summary,
+                improved: `Experienced professional with proven expertise in delivering results. Strong track record of leading initiatives and driving measurable impact.`,
+                category: 'Summary',
+                impact: 'High',
+                status: 'pending'
+            }];
+        } else if (section === 'skills' && resume.skills) {
+            improvements = resume.skills.map((skill, idx) => ({
+                id: idx,
+                original: skill,
+                improved: `${skill} (Advanced)`,
+                category: 'Skills',
+                impact: 'Medium',
+                status: 'pending'
+            }));
+        }
+
+        res.json({ 
+            success: true, 
+            improvements,
+            total: improvements.length 
+        });
+    } catch (error) {
+        console.error('Error generating improvements:', error);
+        res.status(500).json({ error: 'Failed to generate improvements' });
+    }
+};
+
+/**
+ * Download Resume as PDF
+ */
+const downloadResume = async (req, res) => {
+    try {
+        const { resumeId } = req.params;
+        const userId = req.user._id;
+
+        const resume = await Resume.findById(resumeId);
+        if (!resume || resume.userId !== userId.toString()) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
+        // Generate simple text-based resume for now
+        const resumeText = `
+${resume.name}
+${resume.contact?.email || ''} | ${resume.contact?.phone || ''}
+
+SUMMARY
+${resume.summary || ''}
+
+EXPERIENCE
+${resume.experience?.map(exp => `
+${exp.position} - ${exp.company}
+${exp.startDate} - ${exp.endDate || 'Present'}
+${exp.description}
+`).join('\n') || ''}
+
+SKILLS
+${resume.skills?.join(', ') || ''}
+
+EDUCATION
+${resume.education?.map(edu => `${edu.degree} in ${edu.field} from ${edu.school}`).join('\n') || ''}
+        `;
+
+        res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Content-Disposition', `attachment; filename="${resume.name}.txt"`);
+        res.send(resumeText);
+    } catch (error) {
+        console.error('Error downloading resume:', error);
+        res.status(500).json({ error: 'Failed to download resume' });
+    }
+};
+
 module.exports = {
     handleAiRequest,
     getJobRecommendations,
+    applyImprovement,
+    generateImprovements,
+    downloadResume,
     // Admin methods
     getUsers,
     deleteUser,

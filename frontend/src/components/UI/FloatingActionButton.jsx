@@ -18,7 +18,7 @@ const FloatingActionButton = ({ onUpload, onQuickAI, onChat }) => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-8 right-8 z-40 w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_50px_rgba(59,130,246,0.6)] flex items-center justify-center text-white transition-all duration-300"
+        className="fixed bottom-24 right-8 z-40 w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-blue-500 shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:shadow-[0_0_50px_rgba(59,130,246,0.6)] flex items-center justify-center text-white transition-all duration-300"
       >
         <motion.div
           animate={{ rotate: isOpen ? 45 : 0 }}
@@ -60,7 +60,7 @@ const FloatingActionButton = ({ onUpload, onQuickAI, onChat }) => {
                     action.onClick?.();
                     setIsOpen(false);
                   }}
-                  className={`fixed bottom-8 right-8 z-30 w-14 h-14 rounded-full bg-gradient-to-br ${action.color} shadow-lg flex items-center justify-center text-white hover:scale-110 transition-transform`}
+                  className={`fixed bottom-24 right-8 z-30 w-14 h-14 rounded-full bg-gradient-to-br ${action.color} shadow-lg flex items-center justify-center text-white hover:scale-110 transition-transform`}
                 >
                   <Icon className="w-5 h-5" />
                 </motion.button>
@@ -80,7 +80,7 @@ const FloatingActionButton = ({ onUpload, onQuickAI, onChat }) => {
                   exit={{ opacity: 0 }}
                   style={{
                     position: 'fixed',
-                    bottom: `calc(32px + ${Math.abs(y)}px)`,
+                    bottom: `calc(96px + ${Math.abs(y)}px)`,
                     right: `calc(32px + ${Math.abs(x)}px)`,
                     zIndex: 30,
                   }}

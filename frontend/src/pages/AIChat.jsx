@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Loader, MessageCircle, X, HelpCircle } from 'lucide-react';
+import { Send, Loader, MessageCircle, X, HelpCircle, Copy, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import AIRobotAvatar from '../components/AI/AIRobotAvatar';
 
 const AIChat = () => {
     const { user } = useAuth();
@@ -94,21 +95,19 @@ const AIChat = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
         >
-            {/* Header */}
+            {/* Header with Avatar */}
             <div className="pt-24 pb-6 px-4 sm:px-6 lg:px-8 border-b border-white/10">
                 <div className="max-w-4xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="flex items-center gap-3 mb-4"
+                        className="flex items-center gap-4 mb-4"
                     >
-                        <div className="p-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg">
-                            <MessageCircle className="w-6 h-6 text-white" />
-                        </div>
+                        <AIRobotAvatar size="lg" isThinking={loading} isTyping={loading} />
                         <div>
                             <h1 className="text-3xl font-bold text-white">Career AI Assistant</h1>
-                            <p className="text-sm text-gray-400">Always available to help with career questions</p>
+                            <p className="text-sm text-gray-400">Powered by advanced AI - Always available to help</p>
                         </div>
                     </motion.div>
                 </div>
@@ -125,20 +124,41 @@ const AIChat = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className={`mb-6 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                                className={`mb-6 flex gap-3 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
+                                {message.sender === 'bot' && (
+                                    <div className="flex-shrink-0">
+                                        <AIRobotAvatar size="sm" />
+                                    </div>
+                                )}
                                 <div
                                     className={`max-w-md lg:max-w-2xl px-6 py-4 rounded-xl ${
                                         message.sender === 'user'
                                             ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white'
-                                            : 'bg-white/10 border border-white/20 text-gray-100'
+                                            : 'bg-gradient-to-br from-white/10 to-white/5 border border-white/20 text-gray-100 backdrop-blur-sm'
                                     }`}
                                 >
                                     <p className="whitespace-pre-wrap text-sm leading-relaxed">{message.text}</p>
                                     <p className={`text-xs mt-2 ${message.sender === 'user' ? 'text-white/70' : 'text-gray-400'}`}>
                                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </p>
+                                    {message.sender === 'bot' && (
+                                        <div className="flex gap-2 mt-3">
+                                            <motion.button
+                                                whileHover={{ scale: 1.1 }}
+                                                onClick={() => navigator.clipboard.writeText(message.text)}
+                                                className="text-xs text-gray-400 hover:text-white transition-colors flex items-center gap-1"
+                                            >
+                                                <Copy className="w-3 h-3" />
+                                            </motion.button>
+                                        </div>
+                                    )}
                                 </div>
+                                {message.sender === 'user' && (
+                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-orange-500 to-pink-500 flex items-center justify-center text-white text-sm font-bold">
+                                        {user?.name?.charAt(0).toUpperCase() || 'U'}
+                                    </div>
+                                )}
                             </motion.div>
                         ))}
                     </AnimatePresence>
