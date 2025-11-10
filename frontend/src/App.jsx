@@ -7,6 +7,7 @@ import PremiumLoader from './components/PremiumLoader';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import ResumeEditor from './pages/ResumeEditor';
+import CreateResumeWithATS from './pages/CreateResumeWithATS';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import PrivateRoute from './components/PrivateRoute';
@@ -20,6 +21,9 @@ import ResumeFeedback from './pages/ResumeFeedback';
 import Jobs from './pages/Jobs';
 import AIChat from './pages/AIChat';
 import CoverLetterGenerator from './pages/CoverLetterGenerator';
+import Documentation from './pages/Help/Documentation';
+import FAQ from './pages/Help/FAQ';
+import Support from './pages/Help/Support';
 
 function App() {
   const { loading } = useAuth();
@@ -38,6 +42,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
+            <Route path="/resume/create" element={<PrivateRoute element={CreateResumeWithATS} />} />
             <Route path="/resume/edit/:id" element={<PrivateRoute element={ResumeEditor} />} />
             <Route path="/resume/new" element={<PrivateRoute element={ResumeEditor} />} />
             <Route path="/resume/public/:slug" element={<BuilderPreview isPublic={true} />} />
@@ -49,6 +54,9 @@ function App() {
             <Route path="/jobs" element={<PrivateRoute element={Jobs} />} />
             <Route path="/ai-chat" element={<PrivateRoute element={AIChat} />} />
             <Route path="/cover-letter" element={<PrivateRoute element={CoverLetterGenerator} />} />
+            <Route path="/docs" element={<Documentation />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/support" element={<Support />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const advancedResumeController = require('../controllers/advancedResumeController');
-const auth = require('../middleware/auth');
+const { protect } = require('../middleware/authMiddleware');
 
 // All routes require authentication
-router.use(auth);
+router.use(protect);
 
 /**
  * GET /api/ai/analytics/:resumeId

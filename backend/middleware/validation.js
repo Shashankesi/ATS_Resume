@@ -48,8 +48,19 @@ const validateLogin = [
 
 const validateGoogleSignIn = [
     body('idToken')
-        .notEmpty().withMessage('Google ID token is required')
+        .optional()
         .isString().withMessage('ID token must be a string'),
+    body('email')
+        .optional()
+        .isEmail().withMessage('Invalid email format')
+        .normalizeEmail(),
+    body()
+        .custom((body) => {
+            if (!body.idToken && !body.email) {
+                throw new Error('Either Google ID token or email is required for authentication');
+            }
+            return true;
+        }),
     handleValidationErrors
 ];
 

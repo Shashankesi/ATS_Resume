@@ -18,6 +18,10 @@ import {
   Upload
 } from 'lucide-react';
 import ErrorBoundary from '../components/ErrorBoundary';
+import FloatingActionButton from '../components/UI/FloatingActionButton';
+import ParallaxScrollCards from '../components/ScrollAnimations/ParallaxScrollCards';
+import FloatingCube from '../components/ScrollAnimations/FloatingCube';
+import ResumeUploadModal from '../components/ResumeUploadModal';
 
 // Lazy load heavy components
 const DashboardHero = React.lazy(() => import('../components/Dashboard/DashboardHero'));
@@ -25,7 +29,6 @@ const StatCard = React.lazy(() => import('../components/UI/StatCard'));
 const AIToolsHub = React.lazy(() => import('../components/Dashboard/AIToolsHub'));
 const ResumeSection = React.lazy(() => import('../components/Dashboard/ResumeSection'));
 const JobRecommendations = React.lazy(() => import('../components/JobRecommendations'));
-const FloatingActionButton = React.lazy(() => import('../components/UI/FloatingActionButton'));
 
 // Skeleton Loader
 const SkeletonLoader = () => (
@@ -71,7 +74,8 @@ const AI_TOOLS = [
     description: 'Generate tailored cover letters',
     icon: FileText,
     gradient: 'from-blue-500 to-cyan-500',
-    color: 'blue'
+    color: 'blue',
+    route: '/cover-letter'
   },
   {
     id: 'jobs',
@@ -79,7 +83,8 @@ const AI_TOOLS = [
     description: 'Find jobs matching your skills',
     icon: Target,
     gradient: 'from-green-500 to-teal-500',
-    color: 'green'
+    color: 'green',
+    route: '/jobs'
   },
   {
     id: 'chat',
@@ -87,7 +92,8 @@ const AI_TOOLS = [
     description: 'Get personalized career advice',
     icon: MessageSquare,
     gradient: 'from-indigo-500 to-purple-500',
-    color: 'indigo'
+    color: 'indigo',
+    route: '/ai-chat'
   }
 ];
 
@@ -136,28 +142,7 @@ const Dashboard = () => {
   const userSkills = ['React', 'Node.js', 'MongoDB', 'UI/UX', 'Tailwind CSS'];
 
   const handleCreateNewResume = async () => {
-    setLoading(true);
-    try {
-      const response = await api.post('/resume', {
-        name: `Resume - ${new Date().toLocaleDateString()}`,
-        data: {
-          profile: { 
-            name: user?.name || 'Professional', 
-            email: user?.email || '', 
-            summary: 'A professional summary goes here.' 
-          },
-          sections: [
-            { _id: 'profile', type: 'profile', title: 'Profile', order: 0, content: {} },
-            { _id: 'exp1', type: 'experience', title: 'Experience', order: 1, content: { jobs: [] } },
-            { _id: 'skill1', type: 'skills', title: 'Skills', order: 2, content: { list: '' } },
-          ],
-        },
-      });
-      navigate(`/resume/edit/${response.data._id}`);
-    } catch (err) {
-      console.error('Failed to create resume:', err);
-      setLoading(false);
-    }
+    navigate('/resume/create');
   };
 
   const handleUploadResume = () => setShowUpload(true);
@@ -168,29 +153,9 @@ const Dashboard = () => {
   };
 
   const handleToolClick = (tool) => {
-    // Check if tool has a route property
+    // All tools now have routes, so just navigate
     if (tool.route) {
       navigate(tool.route);
-      return;
-    }
-
-    // Central handler for when an AI tool card is clicked
-    switch (tool.id) {
-      case 'jobs':
-        setActiveTool('jobs');
-        break;
-      case 'skills':
-        setActiveTool('skills');
-        break;
-      case 'cover-letter':
-        setActiveTool('cover-letter');
-        break;
-      case 'chat':
-        setActiveTool('chat');
-        break;
-      default:
-        // Default quick AI behavior
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -525,19 +490,55 @@ const Dashboard = () => {
             </motion.div>
           )}
         </motion.section>
-        {/* Additional Sections - Removed for optimization */}
+
+        {/* 3D Scroll Animations Section */}
+        <motion.section
+          className="mb-32"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <h2 className="text-3xl font-bold text-slate-100 mb-12 text-center">Interactive Features</h2>
+          
+          {/* Floating Cube */}
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false }}
+            transition={{ duration: 0.6 }}
+          >
+            <FloatingCube />
+          </motion.div>
+
+          {/* Parallax Scroll Cards */}
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <ParallaxScrollCards />
+          </motion.div>
+        </motion.section>
       </main>
 
       {/* FAB */}
-      <Suspense fallback={null}>
+      <ErrorBoundary>
         <FloatingActionButton
           onUpload={handleUploadResume}
-          onQuickAI={() => handleToolClick('summary')}
-          onChat={() => handleToolClick('chat')}
+          onQuickAI={() => navigate('/resume-improver')}
+          onChat={() => navigate('/ai-chat')}
         />
-      </Suspense>
+      </ErrorBoundary>
 
-      {/* Modals removed for optimization */}
+      {/* Upload Modal */}
+      <ResumeUploadModal 
+        open={showUpload}
+        onClose={() => setShowUpload(false)}
+        onUploaded={handleUploaded}
+      />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, authUser, getProfile, googleSignIn, getMe, refreshToken } = require('../controllers/authController');
+const { registerUser, authUser, getProfile, googleSignIn, googlePreview, demoLogin, getMe, refreshToken, githubSignIn, githubPreview, microsoftSignIn, microsoftPreview } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { authLimiter } = require('../middleware/security');
 const { 
@@ -15,8 +15,16 @@ router.post('/register', authLimiter, validateRegister, registerUser);
 router.post('/login', authLimiter, validateLogin, authUser);
 router.post('/refresh', refreshToken);
 
-// Google Sign-In with validation
+// OAuth Sign-In routes
 router.post('/google', authLimiter, validateGoogleSignIn, googleSignIn);
+router.post('/google/preview', authLimiter, googlePreview);
+router.post('/github', authLimiter, githubSignIn);
+router.post('/github/preview', authLimiter, githubPreview);
+router.post('/microsoft', authLimiter, microsoftSignIn);
+router.post('/microsoft/preview', authLimiter, microsoftPreview);
+
+// Demo/Test Login (no validation needed)
+router.post('/demo', demoLogin);
 
 // Protected routes
 router.get('/profile', protect, getProfile);

@@ -18,9 +18,9 @@ const Register = () => {
   const navigate = useNavigate();
 
   const passwordStrength = {
-    weak: password.length < 8,
-    medium: password.length >= 8 && password.length < 12,
-    strong: password.length >= 12 && /[A-Z]/.test(password) && /[0-9]/.test(password),
+    weak: password.length < 6,
+    medium: password.length >= 6 && password.length < 8,
+    strong: password.length >= 8 && /[A-Z]/.test(password) && /[0-9]/.test(password),
   };
 
   const handleSubmit = async (e) => {
@@ -42,11 +42,21 @@ const Register = () => {
       return;
     }
 
+    if (!/[A-Z]/.test(password)) {
+      setError('Password must contain at least one uppercase letter');
+      return;
+    }
+
+    if (!/[0-9]/.test(password)) {
+      setError('Password must contain at least one number');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await register(name, email, password);
-      showToast.success('Account created successfully! 🎉');
-      setTimeout(() => navigate('/dashboard'), 500);
+      showToast.success('Account created successfully! Please log in. 🎉');
+      setTimeout(() => navigate('/login'), 500);
     } catch (err) {
       const errorMsg = err || 'Registration failed. Please try again.';
       setError(errorMsg);

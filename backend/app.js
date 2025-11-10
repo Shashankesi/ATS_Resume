@@ -33,9 +33,9 @@ app.use(compression());
 // Rate limiting
 app.use(globalLimiter);
 
-// Body parser with size limits
-app.use(express.json({ limit: '10kb' })); 
-app.use(express.urlencoded({ limit: '10kb', extended: true }));
+// Body parser with size limits (increased from 10kb to 50kb)
+app.use(express.json({ limit: '50kb' })); 
+app.use(express.urlencoded({ limit: '50kb', extended: true }));
 
 // Serve static uploads (for uploaded resumes)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {

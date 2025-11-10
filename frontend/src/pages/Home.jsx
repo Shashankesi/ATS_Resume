@@ -20,6 +20,8 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ErrorBoundary from '../components/ErrorBoundary';
+import FloatingCube from '../components/ScrollAnimations/FloatingCube';
+import ParallaxScrollCards from '../components/ScrollAnimations/ParallaxScrollCards';
 
 const Home = () => {
     const { isAuthenticated } = useAuth();
@@ -260,7 +262,7 @@ const Home = () => {
             </section>
 
             {/* Features Grid Section */}
-            <section className="relative py-20 md:py-32 px-4 sm:px-6 lg:px-8">
+            <section id="features" className="relative py-20 md:py-32 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-7xl mx-auto">
                     <motion.div className="text-center mb-16" variants={itemVariants}>
                         <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
@@ -326,6 +328,41 @@ const Home = () => {
                             );
                         })}
                     </div>
+                </div>
+            </section>
+
+            {/* 3D Interactive Animations Section */}
+            <section className="relative py-20 md:py-32 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <motion.div className="text-center mb-16" variants={itemVariants}>
+                        <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                            Interactive Experience
+                        </h2>
+                        <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                            Scroll down to see our AI technology in action
+                        </p>
+                    </motion.div>
+
+                    {/* Floating Cube Animation */}
+                    <motion.div
+                        className="mb-16"
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        transition={{ duration: 0.6 }}
+                    >
+                        <FloatingCube />
+                    </motion.div>
+
+                    {/* Parallax Scroll Cards */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                    >
+                        <ParallaxScrollCards />
+                    </motion.div>
                 </div>
             </section>
 
